@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Move Character Game</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #282c34;
+        }
+        
+        #gameArea {
+            position: relative;
+            width: 500px;
+            height: 500px;
+            background-color: #61dafb;
+        }
+        
+        #character {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background-color: #ff6f61;
+            top: 225px;
+            left: 225px;
+            transition: all 0.1s ease;
+        }
+        
+    </style>
+</head>
+<body>
+    <div id="gameArea">
+        <div id="character"></div>
+    </div>
+    <script src="script.js"></script>
+    <script>
+        const character = document.getElementById('character');
+let left = 225;
+let top = 225;
+
+document.addEventListener('keydown', function(event) {
+    switch(event.key) {
+        case 'ArrowUp':
+            if (top > 0) top -= 25;
+            break;
+        case 'ArrowDown':
+            if (top < 450) top += 25;
+            break;
+        case 'ArrowLeft':
+            if (left > 0) left -= 25;
+            break;
+        case 'ArrowRight':
+            if (left < 450) left += 25;
+            break;
+    }
+    character.style.top = top + 'px';
+    character.style.left = left + 'px';
+});
+
+    </script>
+</body>
+</html>
