@@ -21,21 +21,13 @@ const SplashScreen: React.FC = () => {
       <ImageBackground
         style={styles.icon}
         resizeMode="cover"
-        source={require("./assets/iphone8plus22.png")} // Background image
+        source={require("./assets/logostart.png")} 
       >
         {/* Bright Coding Title */}
         {/* <Text style={styles.brightCoding}>Bright Coding</Text> */}
 
-        {/* Centered Image */}
         <View style={styles.image11} />
-        {/* <Image
-          style={styles.image12Icon}
-          source={require("./assets/image-12.png")}
-        /> */}
-        {/* <Image
-          style={styles.image13Icon}
-          source={require("./assets/image-13.png")}
-        /> */}
+
 
         {/* Start Button */}
         <TouchableOpacity style={styles.startButton} onPress={handleStart}>
@@ -55,8 +47,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0,
     lineHeight: 30,
     fontWeight: "800",
-    fontFamily: "Arial", // Default font family, replace if necessary
-    color: "#FFF", // Color updated
+    fontFamily: "Arial", 
+    color: "#FFF", 
     textAlign: "center",
     width: 254,
     height: 60,
