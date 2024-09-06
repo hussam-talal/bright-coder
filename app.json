@@ -23,7 +23,8 @@
         "foregroundImage": "./assets/icons/playstore-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.bright_coder"
+      "package": "com.bright_coder",
+      "runtimeVersion": "1.0.0"
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -33,6 +34,9 @@
         "projectId": "19f5e061-84ef-4ac9-815c-004a61946da0"
       }
     },
-    "owner": "brightcoder"
+    "owner": "brightcoder",
+    "updates": {
+      "url": "https://u.expo.dev/19f5e061-84ef-4ac9-815c-004a61946da0"
+    }
   }
 }

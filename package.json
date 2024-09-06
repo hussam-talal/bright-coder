@@ -53,7 +53,8 @@
     "react-native-webview": "13.8.6",
     "react-redux": "^9.1.2",
     "expo-auth-session": "~5.5.2",
-    "expo-crypto": "~13.0.2"
+    "expo-crypto": "~13.0.2",
+    "expo-updates": "~0.25.24"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
