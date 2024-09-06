@@ -57,9 +57,8 @@ const ProfileStudent: React.FC = () => {
         throw new Error('No student profiles found for this parent.');
       }
   
-      console.log('Student Profile:', profileData); // Debugging line to see child profile response
+      console.log('Student Profile:', profileData); 
   
-      // Assuming you want to display only the first child, or you can map through the data if there are multiple children
       setProfile(profileData[0]);
     } catch (error) {
       console.error('Error fetching profile:', error);

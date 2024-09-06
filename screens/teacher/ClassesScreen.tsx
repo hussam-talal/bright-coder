@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Dimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { fetchClasses } from '../../lib/CRUD'; // قم بتحديث هذا المسار حسب مكان حفظ ملف CRUD
+import { fetchClasses } from '../../lib/CRUD'; 
 import Header from '../../components/Header'; 
 import { Pressable } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';

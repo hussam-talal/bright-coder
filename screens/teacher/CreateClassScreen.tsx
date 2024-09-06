@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, Image, StyleSheet, ScrollView, Switch,Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../..//lib/routeType'; // تأكد من تعديل المسار حسب مكان وجود ملف routeType
+import { AuthStackParamList } from '../..//lib/routeType'; 
 
 type CreateClassScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'CreateClass'>;
 

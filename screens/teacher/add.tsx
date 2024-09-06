@@ -1,14 +1,13 @@
-import { supabase } from '../../lib/supabase';  // تأكد من أن المسار صحيح
+import { supabase } from '../../lib/supabase';  
 
 const addDataToDatabase = async () => {
-  // إضافة رسالة إلى جدول 'messages'
   const { error: messageError } = await supabase.from('messages').insert([
     {
-      id: '1', // ضع معرف مناسب أو اجعل العمود Auto Increment
+      id: '1', 
       text: 'مرحباً، هذه رسالة اختبار!',
       is_teacher: false,
       created_at: new Date().toISOString(),
-      conversation_id: 1, // مثال على معرف المحادثة
+      conversation_id: 1, 
     },
   ]);
 
@@ -18,12 +17,11 @@ const addDataToDatabase = async () => {
     console.log('Message inserted successfully!');
   }
 
-  // إضافة مستخدم إلى جدول 'profiles'
   const { error: profileError } = await supabase.from('profiles').insert([
     {
-      id: 'user-1', // معرف المستخدم
+      id: 'user-1', 
       full_name: 'Test User', 
-      role: 'student', // مثال على دور المستخدم
+      role: 'student', 
     },
   ]);
 
@@ -34,5 +32,4 @@ const addDataToDatabase = async () => {
   }
 };
 
-// استدعاء الوظيفة لإضافة البيانات
 addDataToDatabase();

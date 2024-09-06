@@ -5,7 +5,6 @@ import { RouteProp } from '@react-navigation/native';
 import { AuthStackParamList } from '../../lib/routeType';
 import { supabase } from '../../lib/supabase';
 
-// Define navigation and route props
 type ClassCodeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ClassCode'>;
 type ClassCodeScreenRouteProp = RouteProp<AuthStackParamList, 'ClassCode'>;
 
@@ -15,7 +14,7 @@ type Props = {
 };
 
 const ClassCode: React.FC<Props> = ({ route, navigation }) => {
-  const { classId } = route.params; // Extract classId from route parameters
+  const { classId } = route.params; 
   const [classCode, setClassCode] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 

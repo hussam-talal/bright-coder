@@ -1,100 +1,7 @@
-// // screens/ConversationsScreen.tsx
-
-// import React, { useState, useEffect } from 'react';
-// import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
-// import { fetchConversations } from '../../lib/ChatItems';
-// import { useNavigation } from '@react-navigation/native';
-// import { AuthStackParamList } from '../../lib/routeType';
-
-
-// interface Conversation {
-//   id: number;
-//   studentId: string;
-//   studentName: string;
-//   studentAvatar: string;
-//   lastMessage: string;
-//   timestamp: Date;
-// }
-
-// const ConversationsScreen: React.FC = () => {
-//   const [conversations, setConversations] = useState<Conversation[]>([]);
-//   const [loading, setLoading] = useState<boolean>(true);
-//   const navigation = useNavigation<AuthStackParamList>();
-
-//   useEffect(() => {
-//     const loadConversations = async () => {
-//       try {
-//         const fetchedConversations = await fetchConversations();
-//         setConversations(fetchedConversations);
-//       } catch (error) {
-//         console.error('Failed to load conversations:', error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     loadConversations();
-//   }, []);
-
-//   const handlePress = (conversationId: number) => {
-//     navigation.navigate('ChatScreen', { conversationId });
-//   };
-
-//   if (loading) {
-//     return <ActivityIndicator size="large" color="#0000ff" />;
-//   }
-
-//   return (
-//     <View style={styles.container}>
-//       <FlatList
-//         data={conversations}
-//         keyExtractor={(item) => item.id.toString()}
-//         renderItem={({ item }) => (
-//           <TouchableOpacity onPress={() => handlePress(item.id)} style={styles.conversationItem}>
-//             <Text style={styles.name}>{item.studentName}</Text>
-//             <Text style={styles.message}>{item.lastMessage}</Text>
-//           </TouchableOpacity>
-//         )}
-//       />
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     padding: 16,
-//   },
-//   conversationItem: {
-//     padding: 16,
-//     borderBottomWidth: 1,
-//     borderBottomColor: '#ccc',
-//   },
-//   name: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//   },
-//   message: {
-//     fontSize: 14,
-//     color: '#777',
-//   },
-// });
-
-// export default ConversationsScreen;
-
-
-
-
-
-
-
-
-
 
 import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { fetchConversations } from '../../lib/ChatItems'; // افترض أن هذه الدالة تقوم بجلب المحادثات
+import { fetchConversations } from '../../lib/ChatItems'; 
 import { AuthContext } from './AuthContext';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../lib/routeType';
@@ -151,7 +58,6 @@ const ConversationsScreen: React.FC<Props> = ({ navigation }) => {
   }, []);
 
   const handleConversationPress = (conversationId: string) => {
-    // Navigate to the chat screen for the specific conversation
     navigation.navigate('ChatScreen', { conversationId });
   };
   

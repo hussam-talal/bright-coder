@@ -14,7 +14,6 @@ export default function TeacherSettings() {
   });
   const [loading, setLoading] = useState<boolean>(true);
 
-  // جلب بيانات الملف الشخصي من قاعدة البيانات
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);

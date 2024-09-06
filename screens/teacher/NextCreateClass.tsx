@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../lib/routeType'; // تأكد من تعديل المسار حسب مكان وجود ملف routeType
-import { supabase } from '../../lib/supabase'; // تأكد من تعديل المسار حسب مكان وجود ملف supabase
+import { AuthStackParamList } from '../../lib/routeType'; 
+import { supabase } from '../../lib/supabase'; 
 
 type NextCreateClassScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'NextCreateClass'>;
 

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import 'react-native-get-random-values';
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from '../../lib/supabase'; // Ensure this path is correct for your project structure
+import { supabase } from '../../lib/supabase'; 
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../lib/routeType';
 

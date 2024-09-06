@@ -7,12 +7,7 @@ import { AuthStackParamList } from '../../lib/routeType';
 import Header from '../../components/Header';
 type AssignmentDetailRouteProps = RouteProp<AuthStackParamList, 'AssignmentDetailsScreen'>;
 
-// Define the route parameter types
-// type AssignmentDetailsRouteProp = RouteProp<{ 
-//   AssignmentDetails: { 
-//     assignmentId: number; 
-//   }; 
-// }, 'AssignmentDetails'>;
+
 
 const AssignmentsDetailsScreen: React.FC = () => {
     const navigation = useNavigation();

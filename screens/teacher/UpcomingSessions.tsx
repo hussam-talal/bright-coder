@@ -4,7 +4,7 @@ import { fetchLiveSessions } from '../../lib/CRUD'; // Adjust path accordingly
 import { LiveSessionType } from '../../lib/routeType'; 
 import { useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
-import { AuthStackParamList } from '../../lib/routeType'; // Import your route types
+import { AuthStackParamList } from '../../lib/routeType'; 
 import LiveTeacherScreen  from '../teacher/LiveTeacher'; 
 
 type UpcomingSessionsNavigationProp = StackNavigationProp<AuthStackParamList>;

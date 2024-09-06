@@ -17,18 +17,16 @@ const SittingStudent = () => {
     }
     
     try {
-      // Simulate saving changes to the database
       const { error } = await supabase.from('students').update({
         username: username,
         password: newPassword,
         notifications: notificationsEnabled,
         language: selectedLanguage,
-      }).eq('id', 'student-id'); // Replace 'student-id' with actual student ID
+      }).eq('id', 'student-id'); 
 
       if (error) throw error;
 
       Alert.alert('Success', 'Settings updated successfully.');
-      // Reset the form
       setCurrentPassword('');
       setNewPassword('');
     } catch (error) {

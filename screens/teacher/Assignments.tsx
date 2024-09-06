@@ -6,7 +6,6 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../lib/routeType';
 import Header from '../../components/Header';
 
-// Define types for route params and navigation props
 type AssignmentsScreenRouteProp = RouteProp<AuthStackParamList, 'Assignments'>;
 type AssignmentsNavigationProp = StackNavigationProp<AuthStackParamList, 'Assignments'>;
 
@@ -28,16 +27,13 @@ const AssignmentsScreen: React.FC = () => {
   const [completedAssignments, setCompletedAssignments] = useState<Assignment[]>([]);
   const [ongoingAssignments, setOngoingAssignments] = useState<Assignment[]>([]);
 
-  // Destructure route params with proper type assertion
   const { classId, teacherId } = route.params;
 
   useEffect(() => {
     const loadAssignments = async () => {
       try {
-        // Use actual classId from route params
         const assignments = await fetchAssignments(classId) as Assignment[]; // Make sure fetchAssignments returns Assignment[]
 
-        // Filter assignments based on status
         setCompletedAssignments(assignments.filter((assignment) => assignment.status === 'completed'));
         setOngoingAssignments(assignments.filter((assignment) => assignment.status === 'ongoing'));
       } catch (error) {

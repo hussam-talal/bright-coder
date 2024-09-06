@@ -32,12 +32,11 @@ const ProfileTeacher: React.FC = () => {
       
       const userId = sessionData.session.user.id;
       
-      // Fetch teacher's profile from the 'profiles' table where role is 'Teacher'
       const { data: profileData, error: profileError } = await supabase
-        .from('profiles') // Use the 'profiles' table
+        .from('profiles') 
         .select('full_name, email, school_name, city, address, avatar_url')
-        .eq('id', userId)  // Fetch by user id
-        .eq('role', 'Teacher') // Ensure the user has a 'Teacher' role
+        .eq('id', userId)  
+        .eq('role', 'Teacher') 
         .single();
 
       if (profileError) {
