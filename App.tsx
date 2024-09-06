@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "./lib/supabase";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Image,  StyleSheet,  I18nManager, ActivityIndicator } from 'react-native';
+import { Image,  StyleSheet,  I18nManager, ActivityIndicator, Alert } from 'react-native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItem, DrawerItemList } from '@react-navigation/drawer';
 import { DrawerContentComponentProps } from '@react-navigation/drawer'; // استيراد النوع المناسب
 import Auth from "./components/Auth";
@@ -48,10 +48,10 @@ import AdminRecognition from './screens/student/games/AdminRecognition';
 import OfflineGamesScreen from './screens/student/games/oflinegames'; 
 import MultiplayerGamesScreen from './screens/student/games/multiplayergames'; 
 import 'react-native-get-random-values';
-import { AuthProvider } from './screens/teacher/AuthContext'; // Adjust the import path
-import { AppProvider } from './screens/teacher/AppContext'; // Adjust the import path
+import { AuthProvider, useAuth } from './screens/teacher/AuthContext'; 
+import { AppProvider } from './screens/teacher/AppContext'; 
 import { Provider } from 'react-redux';
-import { store } from './store/store'; // تأكد من تعديل المسار وفقًا لملف store الخاص بك
+import { store } from './store/store'; 
 
 
 import { Text, TouchableOpacity, View } from 'react-native'; 
@@ -88,7 +88,13 @@ import ControlParentScreen from "./screens/parent/ControlParentScreen";
 import ChildManagement from "./screens/parent/ChildManagement";
 import EditChild from "./screens/parent/EditChild";
 import AddChild from "./screens/parent/AddChild";
-
+import SettingsStudent from "./screens/student/SittingStudent ";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import DrawerNavigator from "./DrawerNavigator";
+import SplashScreen from "./SplashScreen";
+import ProfileStudent from "./screens/student/ProfileStudent";
+import ProfileParent from "./screens/parent/ProfileParent";      
+import ProfileTeacher from "./screens/teacher/ProfileTeacher";
 I18nManager.allowRTL(false);
 
 // إعدادات الإشعارات
@@ -108,182 +114,234 @@ const MessagesTeacherStack = createNativeStackNavigator<AuthStackParamList>();
 const ProgressStudentStack = createNativeStackNavigator<AuthStackParamList>();
 const ControlParentStack = createNativeStackNavigator<AuthStackParamList>();
 
-
 const Drawer = createDrawerNavigator();
-
-// const DrawerNavigator = () => {
-//   return (
-//     <Drawer.Navigator initialRouteName="Profile">
-//       {/* <Drawer.Screen name="Profile" component={ProfileScreen} /> */}
-//       <Drawer.Screen name="Settings" component={SettingsScreen} />
-//       <Drawer.Screen name="Games" component={GamesScreen} />
-//       {/* <Drawer.Screen name="Messages" component={MessageScreen} />
-//       <Drawer.Screen name="JoinClass" component={JoinClassScreen} /> */}
-//       {/* Add more screens as needed */}
-//     </Drawer.Navigator>
-//   );
-// };
 
 interface UserProfile {
   full_name: string;
   avatar_url: string;
+  role: string;
 }
 
-// مكون CustomDrawerContent المحدث
-function CustomDrawerContent(props) {
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
-  const [loading, setLoading] = useState(true);
+// function CustomDrawerContent(props) {
+//   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+//   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-        if (sessionError) throw sessionError;
+//   useEffect(() => {
+//     const fetchData = async () => {
+//       try {
+//         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+//         if (sessionError) throw sessionError;
 
-        const userId = sessionData?.session?.user?.id; 
-        if (!userId) throw new Error('User not authenticated');
+//         const userId = sessionData?.session?.user?.id;
+//         if (!userId) throw new Error('User not authenticated');
 
-        const profileData = await fetchUserProfile(userId); 
-        setUserProfile(profileData);
-      } catch (error) {
-        console.error('Failed to fetch user profile:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+//         const { data: userProfileData, error: profileError } = await supabase
+//           .from('profiles')
+//           .select('full_name, avatar_url, role')
+//           .eq('id', userId)
+//           .single();
+          
+//         if (profileError) throw profileError;
 
-    fetchData();
-  }, []);
+//         setUserProfile(userProfileData);
+//       } catch (error) {
+//         console.error('Failed to fetch user profile:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
 
-  return (
-    <DrawerContentScrollView {...props}>
-      {loading ? (
-        <ActivityIndicator size="large" color="#FFF" />
-      ) : (
-        userProfile && (
-          <View style={styles.profileContainer}>
-            <Image
-              source={{ uri: userProfile.avatar_url }} 
-              style={styles.profileImage}
-            />
-            <Text style={styles.profileName}>{userProfile.full_name}</Text>
-          </View>
-        )
-      )}
+//     fetchData();
+//   }, []);
 
-      {/* عناصر الـ Drawer */}
-      <DrawerItemList {...props} />
+//   return (
+//     <DrawerContentScrollView {...props}>
+//       {loading ? (
+//         <ActivityIndicator size="large" color="#FFF" />
+//       ) : (
+//         userProfile && (
+//           <View style={styles.profileContainer}>
+//             <Image
+//               source={{ uri: userProfile.avatar_url }}
+//               style={styles.profileImage}
+//             />
+//             <Text style={styles.profileName}>{userProfile.full_name}</Text>
+//           </View>
+//         )
+//       )}
+//       {/* Only display DrawerItemList if there's a user profile loaded */}
+//       {!loading && userProfile && <DrawerItemList {...props} />}
+//       <TouchableOpacity 
+//         style={styles.customDrawerItem} 
+//         onPress={async () => {
+//           try {
+//             await supabase.auth.signOut();
+//             Alert.alert("Logged out", "You have been logged out successfully.");
+//           } catch (error) {
+//             if (error instanceof Error) {
+//               console.error("Failed to sign out:", error.message);
+//               Alert.alert("Error", error.message || "Failed to sign out. Please try again.");
+//             } else {
+//               console.error("Failed to sign out:", error);
+//               Alert.alert("Error", "An unknown error occurred. Please try again.");
+//             }
+//           }
+//         }}>
+//         <Ionicons name="log-out-outline" size={22} color="#000" />
+//         <Text style={styles.customDrawerItemText}>Sign Out</Text>
+//       </TouchableOpacity>
+//     </DrawerContentScrollView>
+//   );
+// }
 
-      {/* عناصر مخصصة داخل الـ Drawer */}
-      <TouchableOpacity 
-        style={styles.customDrawerItem} 
-        onPress={() => alert('Sign out')}>
-        <Ionicons name="log-out-outline" size={22} color="#000" />
-        <Text style={styles.customDrawerItemText}>Sign Out</Text>
-      </TouchableOpacity>
-    </DrawerContentScrollView>
-  );
-}
+// const DrawerNavigator = () => {
+//   const [userRole, setUserRole] = useState<string | null>(null);
+//   const [loading, setLoading] = useState(true);
 
-// إعداد Drawer Navigator
-const DrawerNavigator = () => {
-  return (
-    <Drawer.Navigator 
-      drawerContent={(props) => <CustomDrawerContent {...props} />}
-      screenOptions={{
-        headerShown: false,
-        drawerStyle: {
-          backgroundColor: '#1A3C72',
-          width: 240,
-        },
-        drawerLabelStyle: {
-          color: '#FFF',
-        },
-      }}
-    >
-          {/* <Drawer.Screen 
-          name="AccountTypeSelection" 
-          component={AccountTypeSelectionScreen} 
-          options={{ headerShown: false }} 
-          /> */}
-      <Drawer.Screen 
-        name="Dashboard" 
-        component={BottomTabNavigator} 
-        options={{
-          drawerLabel: 'Dashboard',
-          drawerIcon: () => <Ionicons name="grid-outline" size={22} color="#FFF" />,
-        }} 
-      />
-      <Drawer.Screen 
-        name="Games" 
-        component={GamesScreen} 
-        options={{
-          drawerLabel: 'Games',
-          drawerIcon: () => <Ionicons name="game-controller-outline" size={22} color="#FFF" />,
-        }} 
-      />
-      <Drawer.Screen 
-        name="Messages" 
-        component={MessagesScreen} 
-        options={{
-          drawerLabel: 'Messages',
-          drawerIcon: () => <Ionicons name="chatbubble-outline" size={22} color="#FFF" />,
-        }} 
-      />
-      <Drawer.Screen 
-        name="Settings" 
-        component={SettingsScreen} 
-        options={{
-          drawerLabel: 'Settings',
-          drawerIcon: () => <Ionicons name="settings-outline" size={22} color="#FFF" />,
-        }} 
-      />
+//   useEffect(() => {
+//     const fetchUserRole = async () => {
+//       try {
+//         const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+//         if (sessionError || !sessionData?.session) {
+//           throw new Error('Unable to fetch user session.');
+//         }
 
-<Drawer.Screen 
-        name="NotificationsScreen" 
-        component={NotificationsScreen}  
-        options={{
-          drawerLabel: 'Notifications',
-          drawerIcon: () => <Ionicons name="notifications-outline" size={22} color="#FFF" />,
-        }} 
-      />
-    </Drawer.Navigator>
-  );
-};
+//         const userId = sessionData.session.user.id;
 
-const styles = StyleSheet.create({
-  profileContainer: {
-    alignItems: 'center',
-    paddingVertical: 20,
-    backgroundColor: '#1A3C72',
-    marginBottom: 10,
-  },
-  profileImage: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    marginBottom: 10,
-  },
-  profileName: {
-    color: '#FFF',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  customDrawerItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    padding: 10,
-    marginVertical: 5,
-    marginLeft: 15,
-  },
-  customDrawerItemText: {
-    marginLeft: 10,
-    color: '#000',
-    fontSize: 16,
-  },
-});
+//         const { data: userProfile, error: profileError } = await supabase
+//           .from('profiles')
+//           .select('role')
+//           .eq('id', userId)
+//           .single();
 
+//         if (profileError) {
+//           throw new Error('Error fetching user profile.');
+//         }
 
+//         setUserRole(userProfile.role);
+//       } catch (error) {
+//         console.error('Error fetching user role:', error);
+//       } finally {
+//         setLoading(false);
+//       }
+//     };
+
+//     fetchUserRole();
+//   }, []);
+
+//   const getSettingsScreen = () => {
+//     switch (userRole) {
+//       case 'Student':
+//         return SettingsStudent;
+//       case 'Teacher':
+//         return SettingsScreen;
+//       case 'Parent':
+//         return SettingsStudent;
+//       default:
+//         return null; 
+//     }
+//   };
+
+//   if (loading) {
+//     return (
+//       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+//         <Text>Loading...</Text>
+//       </View>
+//     );
+//   }
+
+//   return (
+//     <Drawer.Navigator 
+//       drawerContent={(props) => <CustomDrawerContent {...props} />}
+//       screenOptions={{
+//         headerShown: false,
+//         drawerStyle: {
+//           backgroundColor: '#1A3C72',
+//           width: 240,
+//         },
+//         drawerLabelStyle: {
+//           color: '#FFF',
+//         },
+//       }}
+//     >
+//       {/* Only define drawer items without an initial screen */}
+//       <Drawer.Screen 
+//         name="Dashboard" 
+//         component={BottomTabNavigator} 
+//         options={{
+//           drawerLabel: 'Dashboard',
+//           drawerIcon: () => <Ionicons name="grid-outline" size={22} color="#FFF" />,
+//         }} 
+//       />
+//       <Drawer.Screen 
+//         name="Games" 
+//         component={GamesScreen} 
+//         options={{
+//           drawerLabel: 'Games',
+//           drawerIcon: () => <Ionicons name="game-controller-outline" size={22} color="#FFF" />,
+//         }} 
+//       />
+//       <Drawer.Screen 
+//         name="Messages" 
+//         component={MessagesScreen} 
+//         options={{
+//           drawerLabel: 'Messages',
+//           drawerIcon: () => <Ionicons name="chatbubble-outline" size={22} color="#FFF" />,
+//         }} 
+//       />
+//       {getSettingsScreen() && (
+//         <Drawer.Screen 
+//           name="Settings" 
+//           component={getSettingsScreen()} 
+//           options={{
+//             drawerLabel: 'Settings',
+//             drawerIcon: () => <Ionicons name="settings-outline" size={22} color="#FFF" />,
+//           }} 
+//         />
+//       )}
+//       <Drawer.Screen 
+//         name="NotificationsScreen" 
+//         component={NotificationsScreen}  
+//         options={{
+//           drawerLabel: 'Notifications',
+//           drawerIcon: () => <Ionicons name="notifications-outline" size={22} color="#FFF" />,
+//         }} 
+//       />
+//     </Drawer.Navigator>
+//   );
+// };
+
+// const styles = StyleSheet.create({
+//   profileContainer: {
+//     alignItems: 'center',
+//     paddingVertical: 20,
+//     backgroundColor: '#1A3C72',
+//     marginBottom: 10,
+//   },
+//   profileImage: {
+//     width: 80,
+//     height: 80,
+//     borderRadius: 40,
+//     marginBottom: 10,
+//   },
+//   profileName: {
+//     color: '#FFF',
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+//   customDrawerItem: {
+//     flexDirection: 'row',
+//     alignItems: 'center',
+//     padding: 10,
+//     marginVertical: 5,
+//     marginLeft: 15,
+//   },
+//   customDrawerItemText: {
+//     marginLeft: 10,
+//     color: '#000',
+//     fontSize: 16,
+//   },
+// });
 
 
 
@@ -503,12 +561,19 @@ export default function App() {
         <AppProvider>
         <NavigationContainer>
 
-      {session ? (
-
+      {/* {session ? (
         
-        <Stack.Navigator initialRouteName="AccountTypeSelection" >
- 
+      ):( */}
+
+        <Stack.Navigator initialRouteName="SplashScreen" >
+        {/* <DrawerNavigator /> */}
+        
           <Stack.Screen 
+            name="SplashScreen" 
+            component={SplashScreen} 
+            options={{ headerShown: false }} 
+          />
+           <Stack.Screen 
             name="AccountTypeSelection" 
             component={AccountTypeSelectionScreen} 
             options={{ headerShown: false }} 
@@ -536,7 +601,7 @@ export default function App() {
           />
             <Stack.Screen 
             name="TeacherDetails" 
-            component={TeacherDetails}  // إضافة TeacherDetails إلى المكدس
+            component={TeacherDetails}  
             options={{ headerShown: false }}
           />
           <Stack.Screen 
@@ -548,14 +613,23 @@ export default function App() {
           />
           <Stack.Screen name="DetailsParent" component={DetailsParent} options={{ headerShown: false }} />
           <Stack.Screen name="ParentHome" component={BottomTabNavigatorParent} options={{ headerShown: false }} /> 
-          {/* <Stack.Screen name="PrograssClass" component={PrograssClassScreen} /> */}
-          <Stack.Screen name="CustomDrawerContent" component={CustomDrawerContent} options={{ headerShown: false }} />
+          <Stack.Screen name="ProfileStudent" component={ProfileStudent} />
+          <Stack.Screen name="ProfileParent" component={ProfileParent} options={{ headerShown: false }} />
+          <Stack.Screen name="ProfileTeacher" component={ProfileTeacher} options={{ headerShown: false }} />
 
+
+          <Stack.Screen 
+              name="DrawerNavigator" 
+              component={DrawerNavigator} 
+              options={{ headerShown: false }} 
+            />
           </Stack.Navigator>
-        ) : (
-            <DrawerNavigator />
+          
+        {/* // ) : (
+        //     <DrawerNavigator />
 
-           )}
+        //    )} */}
+     
       </NavigationContainer>
       </AppProvider>
 
@@ -614,6 +688,8 @@ export default function App() {
 };
 
 const BottomTabNavigatorStudent = () => {
+  const [session, setSession] = useState<Session | null>(null);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({

@@ -129,6 +129,13 @@ export type AuthStackParamList = {
   AddChild: undefined;  
   ChildManagement: undefined;
 
+  DrawerNavigator:undefined;
+  SplashScreen: undefined;
+
+  ProfileStudent: undefined;
+  ProfileTeacher: undefined;
+  ProfileParent: undefined;
+
 };
 
 
@@ -146,6 +153,7 @@ export type EditChallengeScreenNavigationProp = StackNavigationProp<AuthStackPar
 export type ChallengesScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'ChallengesScreen'>;
 export type CreateAssignmentScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'CreateAssignmentScreen'>;
 export type AssignmentDetailsScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'AssignmentDetailsScreen'>;
+type AddCourseScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'AddCourse'>;
 
 // أنواع الخصائص (Props) الممررة لكل شاشة
 export type ClassesRouteProp = RouteProp<AuthStackParamList, 'Classes'>;

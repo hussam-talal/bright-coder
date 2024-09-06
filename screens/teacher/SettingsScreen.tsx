@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Image, Alert, ActivityIndicator } from 'react-native';
 import Header from '../../components/Header';
-import { useAuth } from '../../screens/teacher/AuthContext'; // تأكد من مسار الاستيراد الصحيح
-import { supabase } from '../../lib/supabase'; // تأكد من مسار الاستيراد الصحيح
+import { useAuth } from '../../screens/teacher/AuthContext'; 
+import { supabase } from '../../lib/supabase'; 
 
 export default function TeacherSettings() {
-  const { user, signOut } = useAuth(); // الحصول على معلومات المستخدم ووظيفة تسجيل الخروج من السياق
+  const { user, signOut } = useAuth(); 
   const [profile, setProfile] = useState<any>(null);
   const [notifications, setNotifications] = useState({
     classChanges: true,
@@ -42,7 +42,6 @@ export default function TeacherSettings() {
   }, [user]);
 
   const handleEditProfile = () => {
-    // وظيفة لتحرير الملف الشخصي (يمكن فتح شاشة جديدة للتحرير)
     Alert.alert("Edit Profile", "Feature to edit profile coming soon!");
   };
 
@@ -70,7 +69,7 @@ export default function TeacherSettings() {
     try {
       await signOut();
       Alert.alert("Logged out", "You have been logged out successfully.");
-    } catch (error: any) { // تحديد نوع 'error' كـ 'any'
+    } catch (error: any) { 
       console.error("Failed to sign out:", error.message);
       Alert.alert("Error", "Failed to sign out. Please try again.");
     }

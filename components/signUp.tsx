@@ -51,7 +51,7 @@ export default function SignUp({ navigation, route }: SignUpProps) {
       if (userId) {
         await supabase
           .from('profiles')
-          .update({ role, full_name: fullName })
+          .update({ role, full_name: fullName, email: email })
           .eq('id', userId);
       }
 
@@ -68,6 +68,21 @@ export default function SignUp({ navigation, route }: SignUpProps) {
       Alert.alert('Error', 'Something went wrong during sign up. Please try again.');
     }
   };
+
+  // async function signUpWithEmail() {
+  //   setLoading(true)
+  //   const {
+  //     data: { session },
+  //     error,
+  //   } = await supabase.auth.signUp({
+  //     email: email,
+  //     password: password,
+  //   })
+
+  //   if (error) Alert.alert(error.message)
+  //   if (!session) Alert.alert('Please check your inbox for email verification!')
+  //   setLoading(false)
+  // }
 
   return (
     <KeyboardAvoidingView
@@ -276,4 +291,8 @@ const styles = StyleSheet.create({
 
 
 
+
+function setLoading(arg0: boolean) {
+  throw new Error('Function not implemented.');
+}
 

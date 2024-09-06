@@ -8,6 +8,7 @@ import Header from '../../components/Header';
 import { useAuth } from './AuthContext'; 
 import ChatConversationScreen from './ChatConversationScreen';
 import * as Notifications from 'expo-notifications'; 
+import { supabase } from '../../lib/supabase';
 
 interface User {
   id: string;
@@ -47,10 +48,13 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
   const [searchText, setSearchText] = useState<string>('');
   const { user } = useAuth();
 
+  
+
   const loadConversations = useCallback(async () => {
     setLoadingConversations(true);
     try {
       const fetchedConversations = await fetchConversations(user?.id || '');
+      console.log('Fetched Conversations:', fetchedConversations); // عرض المحادثات في وحدة التحكم
       setConversations(fetchedConversations);
     } catch (error) {
       console.error('Failed to load conversations:', error);
@@ -58,6 +62,7 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
       setLoadingConversations(false);
     }
   }, [user]);
+  
 
   useEffect(() => {
     loadConversations();
@@ -126,6 +131,8 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
     <TouchableOpacity
       style={styles.userItem}
       onPress={() => {
+        navigation.navigate('ChatConversationScreen', { conversationId: item.id.toString() }); 
+
         console.log('User selected:', item.full_name);
       }}
     >
@@ -136,6 +143,7 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
       </View>
     </TouchableOpacity>
   );
+
 
   const renderConversationItem = ({ item }: { item: Conversation }) => (
     <TouchableOpacity
@@ -151,7 +159,9 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
         <Text style={styles.lastMessage}>{item.last_message}</Text>
         <Text style={styles.timestamp}>{item.timestamp}</Text>
       </View>
+
     </TouchableOpacity>
+    
   );
 
   const renderMessageItem = ({ item }: { item: Message }) => (
@@ -186,6 +196,7 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
           keyExtractor={(item) => item.id}
           style={styles.userList}
         />
+        
       ) : (
         <FlatList
           data={conversations}
@@ -217,6 +228,7 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
               <Ionicons name="send-outline" size={24} color="#FFF" />
             </TouchableOpacity>
           </View>
+          
         </View>
       )}
     </View>

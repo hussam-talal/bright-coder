@@ -134,6 +134,41 @@ export const createChildProfile = async (childData: ChildData): Promise<any> => 
   return data;
 };
 
+
+export const insertChildProfile = async (
+  parentId: string,
+  fullName: string,
+  email: string,
+  age: number,
+  grade: string,
+  learningPref: string,
+  educationalLevel: string
+) => {
+  try {
+    // إدراج بيانات الطفل في جدول الأطفال وربطها بمعرف الوالد
+    const { data, error } = await supabase
+      .from('children')
+      .insert({
+        parent_id: parentId,  // ربط معرف الوالد
+        full_name: fullName,  // اسم الطفل
+        email: email,         // بريد الطفل الإلكتروني
+        age: age,             // عمر الطفل
+        grade: grade,         // مستوى الطفل الدراسي
+        learning_pref: learningPref, // تفضيلات التعلم
+        educational_level: educationalLevel, // المستوى التعليمي
+      });
+
+    if (error) {
+      throw error;
+    }
+
+    return data; // إرجاع البيانات المدخلة إذا كانت ناجحة
+  } catch (error) {
+    console.error('Error inserting child profile:', error);
+    throw new Error('Failed to insert child profile.');
+  }
+};
+
 // وظيفة لقراءة السجلات مع تحديد نوع المعرف
 export const getChildProfiles = async (parentId: string): Promise<ChildData[]> => {
   const { data, error } = await supabase
@@ -210,8 +245,17 @@ export const addProfile = async (profile: { full_name: string, role: string, sch
 };
 
 export const updateProfile = async (id: string, profile: Partial<{ full_name: string, role: string, school_name?: string, country: string, city: string, phone: string, age_range: string, parent_email: string }>) => {
+  console.log('Updating profile for user with ID:', id);
+  console.log('Profile data being updated:', profile);
+
   const { data, error } = await supabase.from('profiles').update(profile).eq('id', id);
-  if (error) throw error;
+  
+  if (error) {
+    console.error('Error updating profile:', error);
+    throw error;
+  }
+
+  console.log('Update success:', data);
   return data;
 };
 
@@ -1425,8 +1469,8 @@ export async function fetchMessages(conversationId: string | number) {
 export const fetchConversations = async (studentId: string) => {
   const { data, error } = await supabase
     .from('conversations')
-    .select('*')
-    .eq('student_id', studentId);  // استخدام student_id بدلاً من user_id
+    .select('*');
+   // .eq('student_id', studentId);  // استخدام student_id بدلاً من user_id
 
   if (error) throw error;
   return data;

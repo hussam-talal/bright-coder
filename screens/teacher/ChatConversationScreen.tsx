@@ -29,7 +29,7 @@ const ChatConversationScreen: React.FC<ChatScreenProps> = ({ route, navigation }
   const [messages, setMessages] = useState<Message[]>([]);
   const [messageText, setMessageText] = useState<string>('');
   const [loadingMessages, setLoadingMessages] = useState<boolean>(false);
-  const { conversationId } = route.params; // نحصل على معرف المحادثة من المعلمات
+  const { conversationId } = route.params; 
 
   useEffect(() => {
     loadMessages();
@@ -63,7 +63,7 @@ const ChatConversationScreen: React.FC<ChatScreenProps> = ({ route, navigation }
       try {
         await sendMessage(conversationId, messageText, true);
         setMessageText('');
-        loadMessages(); // Refresh messages after sending
+        loadMessages(); 
       } catch (error) {
         console.error('Failed to send message:', error);
       }

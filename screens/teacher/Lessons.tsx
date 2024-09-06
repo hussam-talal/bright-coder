@@ -86,8 +86,8 @@ const LessonsScreen: React.FC<Props> = ({ route, navigation }) => {
       try {
         const { data, error } = await supabase
           .from('courses')
-          .select('id, title, imageurl') // تأكد من استخدام أسماء الأعمدة الصحيحة
-          .eq('class_id', classId);
+          .select('id, title, imageurl') 
+           .eq('classid', classId);
 
         if (error) {
           console.error('Error fetching courses:', error);

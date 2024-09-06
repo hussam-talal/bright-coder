@@ -11,9 +11,11 @@ type AddCourseScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'Ad
 
 type Props = {
   navigation: AddCourseScreenNavigationProp;
+  route: { params: { classId: any } };  // Add classId to route params
 };
 
-const AddCourse: React.FC<Props> = ({ navigation }) => {
+const AddCourse: React.FC<Props> = ({ navigation, route }) => {
+  const { classId } = route.params; // Get classId from route params
   const theme = useTheme();
   const [title, setTitle] = useState<string>('');
   const [description, setDescription] = useState<string>('');
@@ -69,6 +71,7 @@ const AddCourse: React.FC<Props> = ({ navigation }) => {
             title: title,
             description: description,
             imageurl: image?.uri || '',
+            classid: classId,
           },
         ]);
 
