@@ -93,9 +93,18 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DrawerNavigator from "./DrawerNavigator";
 import SplashScreen from "./SplashScreen";
 import ProfileStudent from "./screens/student/ProfileStudent";
+import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen ";
+
 import ProfileParent from "./screens/parent/ProfileParent";      
 import ProfileTeacher from "./screens/teacher/ProfileTeacher";
-I18nManager.allowRTL(false);
+//I18nManager.allowRTL(false);
+const isRTL = I18nManager.isRTL;
+
+if (!isRTL) {
+   I18nManager.forceRTL(false);
+} else {
+   I18nManager.forceRTL(true);
+}
 
 // إعدادات الإشعارات
 Notifications.setNotificationHandler({
@@ -701,9 +710,9 @@ const BottomTabNavigatorStudent = () => {
           } else if (route.name === 'Games') {
             iconName = 'game-controller-outline';
           } 
-          // else if (route.name === 'Tutorials') {
-          //   iconName = 'book-outline';
-          // } 
+          else if (route.name === 'Tutorials') {
+            iconName = 'book-outline';
+          } 
           else if (route.name === 'Progress') {
             iconName = 'bar-chart-outline';
           } else if (route.name === 'Lessons') {
@@ -727,7 +736,7 @@ const BottomTabNavigatorStudent = () => {
       <Tab.Screen name="Home" component={StudentHome} options={{headerShown: false}}/>
       <Tab.Screen name="Games" component={GamesStackScreen} options={{headerShown: false}} />
 
-      {/* <Tab.Screen name="Tutorials" component={TutorialsScreen}options={{headerShown: false}} /> */}
+      <Tab.Screen name="Tutorials" component={StudentLiveStreamsScreen}options={{headerShown: false}} />
       <Tab.Screen name="Progress" component={ProgressStudentStackScreen}options={{headerShown: false}} />
 
       <Tab.Screen name="Lessons" component={LessonsStudentScreen} options={{headerShown: false}} />
@@ -748,12 +757,12 @@ const BottomTabNavigatorParent = () => {
           if (route.name === 'Dashboard') {
             iconName = 'home-outline';
           } else if (route.name === 'Activities') {
-            iconName = 'event-outline';
+            iconName = 'calendar-outline';
           } 
           else if (route.name === 'Progress') {
-            iconName = 'progress';
+            iconName = 'analytics-outline';
           } else if (route.name === 'Control') {
-            iconName = 'user-cog';
+            iconName = 'settings-outline';
           }
 
           return <Ionicons name={iconName} size={size} color={color} />;

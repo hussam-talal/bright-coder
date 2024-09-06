@@ -122,6 +122,8 @@ export const searchUsers = async (searchText: string) => {
   }
 };
 
+
+
 export const createChildProfile = async (childData: ChildData): Promise<any> => {
   const { data, error } = await supabase
     .from('children')
@@ -145,24 +147,23 @@ export const insertChildProfile = async (
   educationalLevel: string
 ) => {
   try {
-    // إدراج بيانات الطفل في جدول الأطفال وربطها بمعرف الوالد
     const { data, error } = await supabase
       .from('children')
       .insert({
-        parent_id: parentId,  // ربط معرف الوالد
-        full_name: fullName,  // اسم الطفل
-        email: email,         // بريد الطفل الإلكتروني
-        age: age,             // عمر الطفل
-        grade: grade,         // مستوى الطفل الدراسي
-        learning_pref: learningPref, // تفضيلات التعلم
-        educational_level: educationalLevel, // المستوى التعليمي
+        parent_id: parentId,  
+        full_name: fullName,  
+        email: email,         
+        age: age,            
+        grade: grade,        
+        learning_pref: learningPref, 
+        educational_level: educationalLevel, 
       });
 
     if (error) {
       throw error;
     }
 
-    return data; // إرجاع البيانات المدخلة إذا كانت ناجحة
+    return data; 
   } catch (error) {
     console.error('Error inserting child profile:', error);
     throw new Error('Failed to insert child profile.');
@@ -1470,7 +1471,7 @@ export const fetchConversations = async (studentId: string) => {
   const { data, error } = await supabase
     .from('conversations')
     .select('*');
-   // .eq('student_id', studentId);  // استخدام student_id بدلاً من user_id
+   // .eq('student_id', studentId);  
 
   if (error) throw error;
   return data;
@@ -1495,7 +1496,7 @@ export const fetchConversationMessages = async (conversationId: string | number)
     return data;
   } catch (error) {
     console.error("Failed to fetch conversation messages:", error);
-    throw error;  // إعادة رمي الخطأ ليتم معالجته في مكان آخر
+    throw error;  
   }
 };
 

@@ -448,9 +448,6 @@ function _log(module, action, label, value) {
         $(document).ready(function() {
             $(document).foundation();
 
-            // @lmartinho HACK: For the subscribe form only
-            // AJAX the newsletter subscribe form, but use custom success action
-            // (redirect to the /about/newsletter page in edit mode
             $('.js-subscribe-form').ajaxForm({
                 success: function(data) {
                     if (!data.subscription_id) {

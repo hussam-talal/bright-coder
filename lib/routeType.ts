@@ -28,8 +28,8 @@ export type AuthStackParamList = {
   Account: { session: Session | null };
   TeacherDetails: {userId: string | undefined};
   TeacherDashboard: undefined;
-  ParentDetails: undefined;  // يمكن تغييرها لاحقًا
-  MainApp: undefined;  // أضف هذا السطر
+  ParentDetails: undefined;  
+  MainApp: undefined;  
   Messages: { Message :any};
   Header: {title: string};
   Classes: undefined;
@@ -135,6 +135,8 @@ export type AuthStackParamList = {
   ProfileStudent: undefined;
   ProfileTeacher: undefined;
   ProfileParent: undefined;
+
+  StudentLiveStreamsScreen: undefined;
 
 };
 
