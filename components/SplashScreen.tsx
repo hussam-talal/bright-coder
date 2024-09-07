@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Image, Pressable, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { AuthStackParamList } from './lib/routeType';
+import { AuthStackParamList } from '../lib/routeType';
 import { StackNavigationProp } from '@react-navigation/stack';
 
 type AccountTypeSelectionNavigationProp = StackNavigationProp<AuthStackParamList>;
@@ -16,12 +16,12 @@ const SplashScreen: React.FC = () => {
   return (
     <Pressable
       style={styles.iphone8Plus2}
-      onPress={handleStart} // Navigate on screen press
+      onPress={handleStart} 
     >
       <ImageBackground
         style={styles.icon}
-        resizeMode="cover"
-        source={require("./assets/logostart.png")} 
+         resizeMode="cover"
+         source={require("../assets/logout.png")} 
       >
         {/* Bright Coding Title */}
         {/* <Text style={styles.brightCoding}>Bright Coding</Text> */}

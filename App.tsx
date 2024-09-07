@@ -91,7 +91,7 @@ import AddChild from "./screens/parent/AddChild";
 import SettingsStudent from "./screens/student/SittingStudent ";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DrawerNavigator from "./DrawerNavigator";
-import SplashScreen from "./SplashScreen";
+import SplashScreen from "./components/SplashScreen";
 import ProfileStudent from "./screens/student/ProfileStudent";
 import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen ";
 
