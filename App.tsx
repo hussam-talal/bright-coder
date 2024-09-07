@@ -91,7 +91,7 @@ import AddChild from "./screens/parent/AddChild";
 import SettingsStudent from "./screens/student/SittingStudent ";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DrawerNavigator from "./DrawerNavigator";
-import StarterPage from "../components/StarterPage
+import StarterPage from "./components/StarterPage";
 import ProfileStudent from "./screens/student/ProfileStudent";
 import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen ";
 
@@ -787,62 +787,4 @@ const BottomTabNavigatorParent = () => {
     </Tab.Navigator>
   );
 };
-
-
-//  function TopNavigation() {
-//   return (
-//     <Tabon.Navigator>
-//         <Tabon.Screen name={StudentsClassRouteProp} component={PrograssClassScreen}  />
-//         <Tabon.Screen name="LessonsScreen" component={LessonsScreen} options={{ headerBackVisible: false }} />
-//         <Tabon.Screen name="StudentsClassScreen" component={StudentsClassScreen} options={{ headerBackVisible: false }} />
-
-//     </Tabon.Navigator>
-//   );
-// };
-
-
-
-        {/* <Stack.Screen 
-          name="TeacherDashboard" 
-          component={TeacherDashboard}  
-          options={{ headerShown: false }}
-        /> */}
-       
- 
-
-
-
-
-// import React, {useState} from 'react';
-// import AgoraUIKit from 'agora-rn-uikit';
-// import { Text } from 'react-native';
-
-// const App = () => {
-//   const [videoCall, setVideoCall] = useState(true);
-//   const connectionData = {
-//     appId: '94c319d594ee480ab48e162c47caa2e4',
-//     channel: 'Testing',
-//   };
-//   const rtcCallbacks = {
-//     EndCall: () => setVideoCall(false),
-//   };
-//   return videoCall ? (
-//     <AgoraUIKit connectionData={connectionData} rtcCallbacks={rtcCallbacks} />
-//   ) : (
-//     <Text onPress={()=>setVideoCall(true)}>Start Call</Text>
-//   );
-// };
-
-// export default App;
-
-
-
-// import android.view.View;
-// import android.view.ViewGroup;
-// import android.widget.Button;
-// import android.widget.FrameLayout;
-// import android.util.Log;
-
-// import io.agora.rtc2.Constants;
-// import io.agora.agorauikit_android.*;
 
