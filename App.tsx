@@ -91,7 +91,7 @@ import AddChild from "./screens/parent/AddChild";
 import SettingsStudent from "./screens/student/SittingStudent ";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import DrawerNavigator from "./DrawerNavigator";
-import SplashScreen from "./components/SplashScreen";
+import StarterPage from "../components/StarterPage
 import ProfileStudent from "./screens/student/ProfileStudent";
 import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen ";
 
@@ -574,12 +574,12 @@ export default function App() {
         
       ):( */}
 
-        <Stack.Navigator initialRouteName="SplashScreen" >
+        <Stack.Navigator initialRouteName="StarterPage" >
         {/* <DrawerNavigator /> */}
         
           <Stack.Screen 
-            name="SplashScreen" 
-            component={SplashScreen} 
+            name="StarterPage" 
+            component={StarterPage} 
             options={{ headerShown: false }} 
           />
            <Stack.Screen 

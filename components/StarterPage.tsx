@@ -6,7 +6,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 type AccountTypeSelectionNavigationProp = StackNavigationProp<AuthStackParamList>;
 
-const SplashScreen: React.FC = () => {
+const StarterPage: React.FC = () => {
   const navigation = useNavigation<AccountTypeSelectionNavigationProp>();
 
   const handleStart = () => {
@@ -103,4 +103,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default StarterPage;

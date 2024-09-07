@@ -16,7 +16,8 @@
       "icon": "./assets/icons/appstore.png",
       "assetBundlePatterns": [
         "**/*"
-      ]
+      ],
+      "bundleIdentifier": "com.brightcoder.brightcodersapp"
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +36,5 @@
       }
     },
     "owner": "brightcoder"
-    
   }
 }

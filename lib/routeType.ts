@@ -130,7 +130,7 @@ export type AuthStackParamList = {
   ChildManagement: undefined;
 
   DrawerNavigator:undefined;
-  SplashScreen: undefined;
+  StarterPage: undefined;
 
   ProfileStudent: undefined;
   ProfileTeacher: undefined;
