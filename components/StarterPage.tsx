@@ -21,7 +21,7 @@ const StarterPage: React.FC = () => {
       <ImageBackground
         style={styles.icon}
          resizeMode="cover"
-         source={require("../assets/logout.png")} 
+         source={require("../assets/logout.jpg")} 
       >
         {/* Bright Coding Title */}
         {/* <Text style={styles.brightCoding}>Bright Coding</Text> */}
