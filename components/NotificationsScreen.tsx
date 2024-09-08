@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, StyleSheet, ActivityIndicator, TouchableOpacity } from 'react-native';
 import { fetchNotifications, updateNotification } from '../lib/CRUD'; // تأكد من تعديل المسار حسب مكان وجود دوال CRUD الخاصة بك
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Header from './Header';
 
 // تعريف نوع البيانات للإشعار
 interface Notification {
@@ -67,6 +68,8 @@ const NotificationsScreen: React.FC = () => {
   }
 
   return (
+    <View style={styles.container1}>
+        <Header title="Image Recognition" />
     <View style={styles.container}>
       <FlatList
         data={notifications}
@@ -76,10 +79,15 @@ const NotificationsScreen: React.FC = () => {
         ListEmptyComponent={<Text style={styles.emptyText}>لا توجد إشعارات</Text>}
       />
     </View>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
+  container1: {
+    flex: 1,
+    backgroundColor: '#800080',
+  },
   container: {
     flex: 1,
     backgroundColor: '#F5F5F5',

@@ -625,7 +625,11 @@ export default function App() {
           <Stack.Screen name="ProfileStudent" component={ProfileStudent} />
           <Stack.Screen name="ProfileParent" component={ProfileParent} options={{ headerShown: false }} />
           <Stack.Screen name="ProfileTeacher" component={ProfileTeacher} options={{ headerShown: false }} />
-
+          <Stack.Screen name="NotificationsScreen"  component={NotificationsScreen}  
+            options={{
+              drawerLabel: 'Notifications',
+              drawerIcon: () => <Ionicons name="notifications-outline" size={22} color="#FFF" />,
+            }} />
 
           <Stack.Screen 
               name="DrawerNavigator" 

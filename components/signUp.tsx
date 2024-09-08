@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ImageBackground, Text, Alert, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, ImageBackground, Text, Alert, KeyboardAvoidingView, Platform, ScrollView, Linking } from 'react-native';
 import { Input, Button, Icon } from '@rneui/themed';
 import { useNavigation, RouteProp } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
@@ -66,6 +66,30 @@ export default function SignUp({ navigation, route }: SignUpProps) {
     } catch (error) {
       console.error('Error during sign up:', error);
       Alert.alert('Error', 'Something went wrong during sign up. Please try again.');
+    }
+  };
+
+  const signInWithGoogle = async () => {
+    // استدعاء تسجيل الدخول باستخدام Google
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'https://ccrbhrzmazrwktqixcoh.supabase.co/auth/v1/callback',  
+      }
+      
+    });
+
+    if (error) {
+      console.error('Error logging in with Google:', error.message);
+    } else {
+      console.log('Google Sign-In successful:', data);
+      if (data?.url) {
+        Linking.openURL(data.url);
+      } else {
+        console.error('No URL returned from Google Sign-In');
+      }
+
+
     }
   };
 
@@ -188,6 +212,7 @@ export default function SignUp({ navigation, route }: SignUpProps) {
 
         <Button
           title="Sign Up With Google"
+          onPress={signInWithGoogle}
           buttonStyle={styles.googleButton}
           titleStyle={styles.socialButtonText}
           icon={{

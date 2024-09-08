@@ -1410,11 +1410,39 @@ export const fetchImageRecognitionProgress = async () => {
   }
 };
 
-export const addImageRecognitionProgress = async (user_id: string, game_id: number, score: number, attempts: number, correct_attempts: number) => {
+export const addImageRecognitionProgress = async (
+  user_id: string,
+  game_id: number,
+  score: number,
+  attempts: number,
+  correct_attempts: number
+) => {
   validateInput({ user_id, game_id, score, attempts, correct_attempts });
+
+  // Debugging: Check the value of game_id
+  console.log('Trying to add progress for game_id:', game_id);
+
   try {
-    const { data, error } = await supabase.from('image_recognition_progress').insert([{ user_id, game_id, score, attempts, correct_attempts }]);
-    if (error) handleError(error);
+    const { data: gameExists, error: gameError } = await supabase
+      .from('image_recognition_games')
+      .select('id')
+      .eq('id', game_id)
+      .single();
+
+    // if (gameError || !gameExists) {
+    //   console.error('Invalid game_id: Game does not exist');
+    //   return null;
+    // }
+
+    const { data, error } = await supabase.from('image_recognition_progress').insert([
+      { user_id, game_id, score, attempts, correct_attempts }
+    ]);
+
+    if (error) {
+      handleError(error);
+      return null;
+    }
+
     return data;
   } catch (error) {
     console.error('Error adding image recognition progress:', error);

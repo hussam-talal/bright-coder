@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Alert, StyleSheet, View, Text, TextInput, Pressable, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView } from "react-native";
+import { Alert, StyleSheet, View, Text, TextInput, Pressable, Image, ImageBackground, KeyboardAvoidingView, Platform, ScrollView, Linking } from "react-native";
 import { supabase } from "../lib/supabase"; // استيراد عميل Supabase
 import { useRoute, NavigationProp, RouteProp } from '@react-navigation/native';
 import { ActivityIndicator } from "react-native"; 
@@ -23,11 +23,34 @@ export default function Auth({ navigation }: { navigation: NavigationProp<any> }
    scopes: ['profile', 'email'],
   });
 
- 
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const signInWithGoogle = async () => {
+    // استدعاء تسجيل الدخول باستخدام Google
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: 'https://ccrbhrzmazrwktqixcoh.supabase.co/auth/v1/callback',  
+      }
+      
+    });
+
+    if (error) {
+      console.error('Error logging in with Google:', error.message);
+    } else {
+      console.log('Google Sign-In successful:', data);
+      if (data?.url) {
+        Linking.openURL(data.url);
+      } else {
+        console.error('No URL returned from Google Sign-In');
+      }
+
+
+    }
+  };
 
   async function signInWithEmail() {
     if (!email || !password) {
@@ -205,9 +228,8 @@ export default function Auth({ navigation }: { navigation: NavigationProp<any> }
   
             <Text style={styles.orText}>Or Sign In with</Text>
   
-            <Pressable style={[styles.socialButton, styles.googleButton]} onPress={() => {
-        promptAsync();
-      }}>
+            <Pressable style={[styles.socialButton, styles.googleButton]} onPress={signInWithGoogle
+      }>
               <Image source={require("../assets/google-logo.png")} style={styles.socialIcon} />
               <Text style={styles.socialButtonText}>Sign In With Google</Text>
             </Pressable>
