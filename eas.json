@@ -9,10 +9,8 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal",
-      "ios": {
-        "enterpriseProvisioning": "adhoc"
-      }
+      "distribution": "internal"
+     
     },
     "production": {
       "android": {
