@@ -9,6 +9,7 @@ import { useAuth } from './AuthContext';
 import ChatConversationScreen from './ChatConversationScreen';
 import * as Notifications from 'expo-notifications'; 
 import { supabase } from '../../lib/supabase';
+import { getAuth } from 'firebase/auth';
 
 interface User {
   id: string;
@@ -50,18 +51,28 @@ const MessagesScreen: React.FC<MessagesScreenProps> = ({ navigation }) => {
 
   
 
-  const loadConversations = useCallback(async () => {
-    setLoadingConversations(true);
-    try {
-      const fetchedConversations = await fetchConversations(user?.id || '');
-      console.log('Fetched Conversations:', fetchedConversations); // عرض المحادثات في وحدة التحكم
-      setConversations(fetchedConversations);
-    } catch (error) {
-      console.error('Failed to load conversations:', error);
-    } finally {
-      setLoadingConversations(false);
+
+
+const loadConversations = useCallback(async () => {
+  setLoadingConversations(true);
+  try {
+    const auth = getAuth();
+    const firebaseUser = auth.currentUser;
+
+    if (!firebaseUser) {
+      throw new Error('User not logged in.');
     }
-  }, [user]);
+
+    const fetchedConversations = await fetchConversations(firebaseUser.uid);
+    console.log('Fetched Conversations:', fetchedConversations); // عرض المحادثات في وحدة التحكم
+    setConversations(fetchedConversations);
+  } catch (error) {
+    console.error('Failed to load conversations:', error);
+  } finally {
+    setLoadingConversations(false);
+  }
+}, []);
+
   
 
   useEffect(() => {

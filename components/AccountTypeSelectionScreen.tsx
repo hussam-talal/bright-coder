@@ -1,46 +1,4 @@
-// import React from 'react';
-// import { StyleSheet, View, Text, Pressable, ImageBackground } from 'react-native';
-// import { useNavigation } from '@react-navigation/native';
-// import { StackNavigationProp } from '@react-navigation/stack';
 
-// type AuthStackParamList = {
-//   AccountTypeSelection: undefined;
-//   Auth: { accountType: string };
-// };
-
-// type AccountTypeScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'AccountTypeSelection'>;
-
-// export default function AccountTypeSelectionScreen() {
-//   const navigation = useNavigation<AccountTypeScreenNavigationProp>();
-
-//   const selectAccountType = (accountType: string) => {
-//     navigation.navigate('Auth', { accountType });
-//   };
-
-//   return (
-//     <ImageBackground
-//       source={require('../assets/background.png')}
-//       style={styles.background}
-//     >
-//       <View style={styles.container}>
-//         <Text style={styles.title}>Welcome Back!</Text>
-//         <Text style={styles.subtitle}>Choose Account Type</Text>
-
-//         <Pressable style={styles.button} onPress={() => selectAccountType('Student')}>
-//           <Text style={styles.buttonText}>Student</Text>
-//         </Pressable>
-
-//         <Pressable style={styles.button} onPress={() => selectAccountType('Parent')}>
-//           <Text style={styles.buttonText}>Parent</Text>
-//         </Pressable>
-
-//         <Pressable style={styles.button} onPress={() => selectAccountType('Teacher')}>
-//           <Text style={styles.buttonText}>Teacher</Text>
-//         </Pressable>
-//       </View>
-//     </ImageBackground>
-//   );
-// }
 
 import React, { useState } from 'react';
 import { View, Text, Pressable, StyleSheet, ImageBackground } from 'react-native';

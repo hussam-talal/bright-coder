@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "922642052240",
+    "project_id": "pright-coder",
+    "storage_bucket": "pright-coder.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:922642052240:android:02b0bda0079b0fd5399415",
+        "android_client_info": {
+          "package_name": "com.bright_coder"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBSXCFqOe0CFknv-1k4j23CVABpczvJJ_o"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

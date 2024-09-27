@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { supabase } from '../../lib/supabase'; 
+import { getAuth } from 'firebase/auth'; // استيراد Firebase Auth
 
 interface TeacherProfile {
   full_name: string;
@@ -24,14 +25,16 @@ const ProfileTeacher: React.FC = () => {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+      const auth = getAuth();
+      const user = auth.currentUser; // جلب المستخدم الحالي من Firebase
       
-      if (sessionError || !sessionData?.session) {
-        throw new Error('Unable to fetch user session.');
+      if (!user) {
+        throw new Error('No user logged in.');
       }
+
+      const userId = user.uid; // استخدام UID من Firebase
       
-      const userId = sessionData.session.user.id;
-      
+      // جلب البيانات من جدول profiles في Supabase
       const { data: profileData, error: profileError } = await supabase
         .from('profiles') 
         .select('full_name, email, school_name, city, address, avatar_url')
@@ -115,7 +118,7 @@ const ProfileTeacher: React.FC = () => {
 
         {/* school_name */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>school_name</Text>
+          <Text style={styles.label}>School Name</Text>
           <TextInput
             style={styles.input}
             value={profile?.school_name || ''}
@@ -126,19 +129,18 @@ const ProfileTeacher: React.FC = () => {
 
         {/* city */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>city (Years)</Text>
+          <Text style={styles.label}>City</Text>
           <TextInput
             style={styles.input}
             value={profile?.city || ''}
             onChangeText={(text) => setProfile({ ...profile!, city: text })}
             editable={isEditing}
-            keyboardType="numeric"
           />
         </View>
 
         {/* address */}
         <View style={styles.inputGroup}>
-          <Text style={styles.label}>address</Text>
+          <Text style={styles.label}>Address</Text>
           <TextInput
             style={styles.input}
             value={profile?.address || ''}

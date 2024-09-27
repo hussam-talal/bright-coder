@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import AgoraUIKit from 'agora-rn-uikit';
 import { View, Text, TouchableOpacity, StyleSheet, TextInput, FlatList } from 'react-native';
 import { supabase } from '../../lib/supabase'; // Make sure your database connection is set up
+import { getAuth } from 'firebase/auth';
 
 interface ChatMessage {
   sender: string;
@@ -28,17 +29,20 @@ const LiveTeacherScreen = () => {
   };
 
   useEffect(() => {
-  const fetchTeacherId = async () => {
-    const { data: { user }, error } = await supabase.auth.getUser();
-    if (error) {
-      console.error('Error fetching user:', error);
-    } else if (user) {
-      setTeacherId(user.id);
-    }
-  };
-
-  fetchTeacherId();
-}, []);
+    const fetchTeacherId = async () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+  
+      if (!user) {
+        console.error('User is not logged in');
+        return;
+      }
+  
+      setTeacherId(user.uid);
+    };
+  
+    fetchTeacherId();
+  }, []);
 
 
   // Start live stream

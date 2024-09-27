@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useNavigation } from '@react-navigation/native';
 import { MaterialIcons, FontAwesome } from '@expo/vector-icons';
 import Header from '../../components/Header';
+import { getAuth } from 'firebase/auth';
 
 // Define your data types
 type ClassData = {
@@ -28,10 +29,6 @@ type ChildData = {
   parent_id: string;
 };
 
-// Utility function to validate UUIDs
-const isValidUUID = (uuid: string) => {
-  return /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(uuid);
-};
 
 export default function ParentHome() {
   const navigation = useNavigation();
@@ -47,15 +44,14 @@ export default function ParentHome() {
   const fetchChildAndClasses = async () => {
     try {
       setLoading(true);
-
-      // Get the current session
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
-      if (sessionError) {
-        console.error('Error retrieving parent session:', sessionError);
-        throw new Error('Error retrieving parent session');
+      const user = getAuth().currentUser; // الحصول على المستخدم من Firebase
+  
+      if (!user) {
+        throw new Error('User is not logged in');
       }
 
-      const parentId = session?.user?.id;
+      const parentId = user.uid;
+      
       if (!parentId) {
         throw new Error('Parent is not logged in');
       }
@@ -76,11 +72,6 @@ export default function ParentHome() {
         throw new Error('No child linked to this parent');
       }
 
-      // Ensure child ID is a valid UUID
-      if (!isValidUUID(childData.id)) {
-        console.error('Invalid UUID format for child ID:', childData.id);
-        throw new Error('Invalid UUID format for child ID');
-      }
 
       setChild(childData);
 

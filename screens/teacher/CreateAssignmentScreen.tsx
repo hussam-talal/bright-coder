@@ -6,7 +6,6 @@ import { createAssignment } from '../../lib/CRUD';
 import { AuthStackParamList } from '../../lib/routeType';
 import Header from '../../components/Header';
 
-// Define route props type
 type CreateAssignmentScreenRouteProp = RouteProp<AuthStackParamList, 'CreateAssignmentScreen'>;
 
 const CreateAssignmentScreen: React.FC = () => {
@@ -18,15 +17,9 @@ const CreateAssignmentScreen: React.FC = () => {
   const [dueDate, setDueDate] = useState<Date | null>(null);
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [teamMembers, setTeamMembers] = useState<string[]>([]);
+  const [newMember, setNewMember] = useState('');
 
-  // Extract parameters from route.params
   const { classId, teacherId } = route.params;
-
-  // Ensure teacherId is a valid UUID
-  if (!/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(teacherId)) {
-    Alert.alert('Error', 'Invalid teacher ID format. Please provide a valid UUID.');
-    return null;
-  }
 
   const handleAddAssignment = async () => {
     if (!title || !description || !dueDate) {
@@ -34,15 +27,14 @@ const CreateAssignmentScreen: React.FC = () => {
       return;
     }
 
-    // Format the date to YYYY-MM-DD
     const formattedDate = dueDate.toISOString().split('T')[0];
 
     const assignmentData = {
       title,
       description,
       due_date: formattedDate,
-      class_id: classId,  // Use actual class ID
-      teacher_id: teacherId,  // Use actual teacher ID
+      class_id: classId,
+      teacher_id: teacherId,
     };
 
     try {
@@ -57,8 +49,17 @@ const CreateAssignmentScreen: React.FC = () => {
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
     const currentDate = selectedDate || dueDate;
-    setShowDatePicker(Platform.OS === 'ios'); // Keep the picker open on iOS
+    setShowDatePicker(Platform.OS === 'ios');
     setDueDate(currentDate);
+  };
+  
+  const handleAddMember = () => {
+    if (newMember.trim()) {
+      setTeamMembers([...teamMembers, newMember]); // إضافة العضو الجديد إلى قائمة الفريق
+      setNewMember(''); // إعادة تعيين حقل إدخال العضو الجديد
+    } else {
+      Alert.alert('Error', 'Please enter a valid team member name.');
+    }
   };
 
   return (
@@ -85,6 +86,17 @@ const CreateAssignmentScreen: React.FC = () => {
         />
 
         <Text style={styles.label}>Add team members</Text>
+        <TextInput
+          style={styles.input}
+          value={newMember}
+          onChangeText={setNewMember}
+          placeholder="Add team member"
+          placeholderTextColor="#666"
+        />
+        <TouchableOpacity style={styles.addButton} onPress={handleAddMember}>
+          <Text style={styles.addButtonText}>Add Member</Text>
+        </TouchableOpacity>
+
         {teamMembers.map((member, index) => (
           <Text key={index} style={styles.teamMember}>{member}</Text>
         ))}
@@ -160,6 +172,17 @@ const styles = StyleSheet.create({
   createButtonText: {
     color: '#fff',
     fontSize: 18,
+    fontWeight: 'bold',
+  },
+  addButton: {
+    backgroundColor: '#50BFE6',
+    padding: 10,
+    borderRadius: 5,
+    alignItems: 'center',
+    marginBottom: 10,
+  },
+  addButtonText: {
+    color: '#fff',
     fontWeight: 'bold',
   },
 });

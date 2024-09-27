@@ -4,6 +4,7 @@ import { supabase } from '../../../lib/supabase';
 import * as FileSystem from 'expo-file-system';
 import * as Sharing from 'expo-sharing';
 import Header from '../../../components/Header';
+import { getAuth } from 'firebase/auth';
 
 interface Game {
   id: string;
@@ -94,12 +95,14 @@ const OfflineGamesScreen: React.FC = () => {
 
   useEffect(() => {
     // الحصول على user_id من Supabase
-    const fetchUserId = async () => {
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error) {
-        console.error('Error fetching user:', error);
-      } else if (user) {
-        setUserId(user.id);
+    const fetchUserId = () => {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (user) {
+        setUserId(user.uid);  // استخدم معرف Firebase
+      } else {
+        console.error('No user logged in');
       }
     };
 

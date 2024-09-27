@@ -1,69 +1,3 @@
-// import React, { useState } from 'react';
-// import { View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
-// import { WebView } from 'react-native-webview';
-
-
-// const GamesDiffrentScreen = () => {
-//   const [selectedGame, setSelectedGame] = useState<string | null>(null);
-
-//   const renderGameLink = ({ item }: { item: Game }) => (
-//     <TouchableOpacity style={styles.linkContainer} onPress={() => setSelectedGame(item.url)}>
-//       <Image source={{ uri: item.imageUrl }} style={styles.gameImage} />
-//       <Text style={styles.linkText}>{item.name}</Text>
-//     </TouchableOpacity>
-//   );
-
-//   return (
-//     <View style={{ flex: 1 }}>
-//       {selectedGame ? (
-//         <WebView source={{ uri: selectedGame }} style={{ flex: 1 }} />
-//       ) : (
-//         <View style={styles.container}>
-//           <Text style={styles.title}>Select a Game to Play</Text>
-//           <FlatList
-//             data={games}
-//             renderItem={renderGameLink}
-//             keyExtractor={item => item.id}
-//           />
-//         </View>
-//       )}
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     padding: 20,
-//     backgroundColor: '#f8f9fa',
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//     textAlign: 'center',
-//   },
-//   linkContainer: {
-//     padding: 15,
-//     backgroundColor: '#6c63ff',
-//     borderRadius: 10,
-//     marginBottom: 10,
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//   },
-//   gameImage: {
-//     width: 50,
-//     height: 50,
-//     marginRight: 15,
-//     borderRadius: 5,
-//   },
-//   linkText: {
-//     color: '#fff',
-//     fontSize: 18,
-//   },
-// });
-
-// export default GamesDiffrentScreen;
 
 
 
@@ -92,7 +26,7 @@ const onlineGames: Gamess[] = [
     url: 'https://lightbot.com/flash.html',
     imageurl: 'https://lightbot.com/img/logo-lightbot.png',
   },
-  // باقي الألعاب...
+  //
 ];
 
 interface Game {

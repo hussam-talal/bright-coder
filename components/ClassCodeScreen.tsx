@@ -5,6 +5,7 @@ import { StackNavigationProp } from '@react-navigation/stack';
 import { supabase } from '../lib/supabase'; // Make sure supabase is correctly imported
 import { AuthStackParamList } from '../lib/routeType';
 import { addClassStudent } from '../lib/CRUD'; // Import the function to add a student to the class
+import { getAuth } from 'firebase/auth';
 
 type ClassCodeScreenNavigationProp = StackNavigationProp<AuthStackParamList>;
 
@@ -41,15 +42,19 @@ export default function ClassCodeScreen() {
       }
 
       // Get the current user's ID from Supabase auth
-      const { data: { user }, error } = await supabase.auth.getUser();
-      if (error || !user) {
-        console.error('Supabase error fetching user:', error);
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) {
+        console.error('Firebase Auth error: No user is logged in.');
         Alert.alert('Error', 'User not found. Please log in.');
         return;
       }
 
+      const userId = user.uid;
+
       // Add the student to the class
-      await addClassStudent(classData.id, user.id, new Date().toISOString());
+      await addClassStudent(classData.id, user.uid, new Date().toISOString());
 
       Alert.alert('Success', 'You have successfully joined the class.');
       navigation.navigate('StudentHome');

@@ -73,7 +73,6 @@ import LiveTeacherScreen from "./screens/teacher/LiveTeacher"; NotificationsScre
 import NotificationsScreen from "./components/NotificationsScreen";
 import { fetchUserProfile } from './lib/CRUD'; 
 
-
 // import BottomTabNavigator from "./components/BottomTabNavigator";
 import * as Notifications from 'expo-notifications';
 import AddCourse from "./screens/teacher/AddCourse";
@@ -97,14 +96,13 @@ import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen
 
 import ProfileParent from "./screens/parent/ProfileParent";      
 import ProfileTeacher from "./screens/teacher/ProfileTeacher";
-//I18nManager.allowRTL(false);
-const isRTL = I18nManager.isRTL;
-
-if (!isRTL) {
-   I18nManager.forceRTL(false);
-} else {
-   I18nManager.forceRTL(true);
-}
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import ChildProgressScreen from "./screens/parent/ChildProgressScreen";
+import CreateInteractiveGameScreen from "./screens/student/games/CreateInteractiveGameScreen ";
+import { useTranslation } from 'react-i18next'; 
+import './lib/i18n';
+import 'intl-pluralrules';
 
 // إعدادات الإشعارات
 Notifications.setNotificationHandler({
@@ -122,6 +120,8 @@ const GamesStack = createNativeStackNavigator<AuthStackParamList>();
 const MessagesTeacherStack = createNativeStackNavigator<AuthStackParamList>();
 const ProgressStudentStack = createNativeStackNavigator<AuthStackParamList>();
 const ControlParentStack = createNativeStackNavigator<AuthStackParamList>();
+const ProgressParent = createNativeStackNavigator<AuthStackParamList>();
+
 
 const Drawer = createDrawerNavigator();
 
@@ -130,6 +130,469 @@ interface UserProfile {
   avatar_url: string;
   role: string;
 }
+
+
+
+function ClassStackScreen() {
+  return (
+    <ClassStack.Navigator screenOptions={{headerShown: false}}>
+      
+        <ClassStack.Screen name ="Classes" component={ClassesScreen} options={{headerShown : false }} />
+        <ClassStack.Screen name="CreateClass" component={CreateClassScreen} />
+        <ClassStack.Screen name="NextCreateClass" component={NextCreateClass} options={{ headerShown: false }}  /> 
+        <ClassStack.Screen name="PrograssClass" component={PrograssClassScreen} options={{ headerShown: false }}
+         />
+        <ClassStack.Screen
+        name="Lessons"
+        component={LessonsScreen}
+        options={{ headerShown: false }}
+
+      />
+      <ClassStack.Screen
+        name="StudentsClass"
+        component={StudentsClassScreen}
+        options={{ headerShown: false }}
+        
+      />
+        <ClassStack.Screen
+        name="sessionNavigator"
+        component={sessionNavigator}
+        options={{ headerShown: false }}
+      />
+       <ClassStack.Screen
+        name="Activity"
+        component={ActivityScreen}
+        options={{ headerShown: false }}
+      />
+      <ClassStack.Screen
+        name="ChatScreen"
+        component={ChatScreen}
+        options={{ headerShown: false }}
+      />
+      <ClassStack.Screen name="ConversationsScreen" component={ConversationsScreen} />
+      <ClassStack.Screen name="AddStudent" component={AddStudent} />
+      <ClassStack.Screen name="ClassCode" component={ClassCode} />
+      <ClassStack.Screen
+        name="Assignments"
+        component={Assignments}
+        options={{ headerShown: false }}
+        
+      />
+       <ClassStack.Screen
+        name="ChallengesScreen"
+        component={ChallengesScreen}
+        options={{ headerShown: false }}
+        
+      />
+
+       <ClassStack.Screen
+        name="AssignmentDetailsScreen"
+        component={AssignmentsDetailsScreen}
+        options={{ headerShown: false }}
+        
+      />
+        <ClassStack.Screen
+        name="CreateAssignmentScreen"
+        component={CreateAssignmentScreen}
+        options={{ headerShown: false }}
+        
+      />
+          <ClassStack.Screen
+        name="EditChallengeScreen"
+        component={EditChallengeScreen}
+        options={{ headerShown: false }}
+        
+      />
+        <ClassStack.Screen
+        name="CreateChallengeScreen"
+        component={CreateChallengeScreen}
+        options={{ headerShown: false }}
+        
+      />
+
+
+       <ClassStack.Screen
+        name="LiveTeacherScreen"
+
+        component={ () => <LiveTeacherScreen />}
+        options={{ headerShown: false }}
+      />
+      
+      <ClassStack.Screen
+        name="AddCourse"
+        component={AddCourse}
+        options={{ headerShown: false }}
+
+
+        
+      />
+    </ClassStack.Navigator>
+  );
+}
+
+function GamesStackScreen() {
+  return (
+    <GamesStack.Navigator screenOptions={{headerShown: false}}>
+          <GamesStack.Screen name="GamesScreen" component={GamesScreen} options={{headerShown: false}} />
+        <GamesStack.Screen name ="Multiplayer" component={MultiplayerGamesScreen} options={{headerShown : false }} />
+        <GamesStack.Screen name="SinglePlayer" component={SinglePlayer} />
+        <GamesStack.Screen name="ImageRecognitionGames" component={ImageRecognitionGames} options={{ headerShown: false }}  /> 
+        <GamesStack.Screen name="CreateInteractiveGameScreen" component={CreateInteractiveGameScreen} options={{ headerShown: false }}/>
+        <GamesStack.Screen name="GamesDiffrentScreen" component={GamesDiffrentScreen} options={{ headerShown: false }} />
+      <GamesStack.Screen name="AdminRecognition" component={AdminRecognition} options={{ headerShown: false }}  />
+
+      <GamesStack.Screen name="OfflineGamesScreen" component={OfflineGamesScreen} options={{ headerShown: false }} />
+            {/* <ClassStack.Screen
+        name="CodeCombatCourses"
+        component={CodeCombatCourses}
+      /> */}
+
+    </GamesStack.Navigator>
+  );
+}
+//ChildManagement
+
+function MessagesTeacherStackScreen() {
+  return (
+    <MessagesTeacherStack.Navigator screenOptions={{headerShown: false}}>
+        <MessagesTeacherStack.Screen name="Messages" component={MessagesScreen} options={{headerShown: false}} />
+        <MessagesTeacherStack.Screen name ="ChatConversationScreen" component={ChatConversationScreen} options={{headerShown : false }} />
+       
+    </MessagesTeacherStack.Navigator>
+  );
+}
+
+function ControlParentStackScreen() {
+  return (
+    <ControlParentStack.Navigator screenOptions={{headerShown: false}}>
+        <ControlParentStack.Screen name="ChildManagement" component={ChildManagement} options={{headerShown: false}} />
+        <ControlParentStack.Screen name ="ControlParentScreen" component={ControlParentScreen} options={{headerShown : false }} />
+        <ControlParentStack.Screen name ="AddChild" component={AddChild} options={{headerShown : false }} />
+        <ControlParentStack.Screen name ="EditChild" component={EditChild} options={{headerShown : false }} />
+
+    </ControlParentStack.Navigator>
+  );
+}
+
+
+
+function ProgressStudentStackScreen() {
+  return (
+    <ProgressStudentStack.Navigator screenOptions={{headerShown: false}}>
+        <ProgressStudentStack.Screen name="ProgressStudent" component={ProgressStudentScreen} options={{headerShown: false}} />
+        <ProgressStudentStack.Screen name ="CompletedCourses" component={CompletedCourses} options={{headerShown : false }} />
+        <ProgressStudentStack.Screen name ="CompletedGames" component={CompletedGames} options={{headerShown : false }} />
+
+       
+    </ProgressStudentStack.Navigator>
+  );
+}
+
+function ProgressParentStack() {
+  return (
+    <ProgressParent.Navigator screenOptions={{headerShown: false}}>
+        <ProgressParent.Screen name="ProgressParent" component={ProgressParentScreen} options={{headerShown: false}} />
+        <ProgressParent.Screen name ="ChildProgressScreen" component={ChildProgressScreen} options={{headerShown : false }} />
+
+       
+    </ProgressParent.Navigator>
+  );
+}
+
+
+export default function App() {
+  const [session, setSession] = useState<Session | null>(null);
+  
+  const [fontsLoaded] = useFonts({
+    "Lexend-Regular": require("./assets/fonts/Lexend-Regular.ttf"),
+    "Lexend-SemiBold": require("./assets/fonts/Lexend-SemiBold.ttf"),
+    "Lexend-Bold": require("./assets/fonts/Lexend-Bold.ttf"),
+    "Manrope-Light": require("./assets/fonts/Manrope-Light.ttf"),
+    "Manrope-Regular": require("./assets/fonts/Manrope-Regular.ttf"),
+    "Manrope-Medium": require("./assets/fonts/Manrope-Medium.ttf"),
+    "Manrope-SemiBold": require("./assets/fonts/Manrope-SemiBold.ttf"),
+    "Manrope-Bold": require("./assets/fonts/Manrope-Bold.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
+    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
+    "PlusJakartaSans-Regular": require("./assets/fonts/PlusJakartaSans-Regular.ttf"),
+    "PlusJakartaSans-Medium": require("./assets/fonts/PlusJakartaSans-Medium.ttf"),
+    "PlusJakartaSans-SemiBold": require("./assets/fonts/PlusJakartaSans-SemiBold.ttf"),
+    "PlusJakartaSans-Bold": require("./assets/fonts/PlusJakartaSans-Bold.ttf"),
+    "PlusJakartaSans-ExtraBold": require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
+    "Inter-Regular": require("./assets/fonts/Inter-Regular.ttf"),
+    "Inter-Medium": require("./assets/fonts/Inter-Medium.ttf"),
+    "Inter-SemiBold": require("./assets/fonts/Inter-SemiBold.ttf"),
+    "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
+    "Epilogue-Regular": require("./assets/fonts/Epilogue-Regular.ttf"),
+    "Epilogue-Bold": require("./assets/fonts/Epilogue-Bold.ttf"),
+    "Epilogue-ExtraBold": require("./assets/fonts/Epilogue-ExtraBold.ttf"),
+    "Epilogue-Black": require("./assets/fonts/Epilogue-Black.ttf"),
+    "Lato-Light": require("./assets/fonts/Lato-Light.ttf"),
+    "Lato-Bold": require("./assets/fonts/Lato-Bold.ttf"),
+  });
+
+
+  useEffect(() => {
+    const getSession = async () => {
+      const { data } = await supabase.auth.getSession();
+      setSession(data.session);
+    };
+
+    getSession();
+
+    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log('Notification received!', notification);
+    });
+
+    return () => {
+      authListener.subscription.unsubscribe();
+      subscription.remove();
+    };
+  }, []);
+
+  return (
+      <Provider store={store}>
+        <AppProvider>
+        <NavigationContainer>
+
+      {/* {session ? (
+        
+      ):( */}
+
+        <Stack.Navigator initialRouteName="StarterPage" >
+        {/* <DrawerNavigator /> */}
+        
+          <Stack.Screen 
+            name="StarterPage" 
+            component={StarterPage} 
+            options={{ headerShown: false }} 
+          />
+           <Stack.Screen 
+            name="AccountTypeSelection" 
+            component={AccountTypeSelectionScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="SignUp"
+            component={SignUp} 
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="Auth" 
+            component={Auth} 
+            options={{ headerShown: false }} 
+          />
+          
+          <Stack.Screen 
+            name="AgeSelection" 
+            component={AgeSelectionScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="ClassCodeScreen" 
+            component={ClassCodeScreen} 
+            options={{ headerShown: false }} 
+          />
+            <Stack.Screen 
+            name="TeacherDetails" 
+            component={TeacherDetails}  
+            options={{ headerShown: false }}
+          />
+          <Stack.Screen 
+            name="TeacherDashboard" 
+            component={BottomTabNavigator} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen name="StudentHome" component={BottomTabNavigatorStudent} options={{ headerShown: false }} 
+          />
+          <Stack.Screen name="DetailsParent" component={DetailsParent} options={{ headerShown: false }} />
+          <Stack.Screen name="ParentHome" component={BottomTabNavigatorParent} options={{ headerShown: false }} /> 
+          <Stack.Screen name="ProfileStudent" component={ProfileStudent} />
+          <Stack.Screen name="ProfileParent" component={ProfileParent} options={{ headerShown: false }} />
+          <Stack.Screen name="ProfileTeacher" component={ProfileTeacher} options={{ headerShown: false }} />
+          <Stack.Screen name="NotificationsScreen"  component={NotificationsScreen}  
+            options={{
+              drawerLabel: 'Notifications',
+              drawerIcon: () => <Ionicons name="notifications-outline" size={22} color="#FFF" />,
+            }} />
+
+          <Stack.Screen 
+              name="DrawerNavigator" 
+              component={DrawerNavigator} 
+              options={{ headerShown: false }} 
+            />
+          </Stack.Navigator>
+          
+        {/* // ) : (
+        //     <DrawerNavigator />
+
+        //    )} */}
+     
+      </NavigationContainer>
+      </AppProvider>
+
+      </Provider>
+          
+    );
+  }
+
+  const BottomTabNavigator = () => {
+    const { t } = useTranslation(); 
+
+    return (
+      <Provider store={store}>
+            <AuthProvider>
+
+
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ color, size }) => {
+            let iconName = '';
+
+            if (route.name === t('Dashboard')) {
+              iconName = 'grid-outline';
+            } else if (route.name === t('Classes')) {
+              iconName = 'book-outline';
+            } else if (route.name === t('Messages')) {
+              iconName = 'chatbubble-ellipses-outline';
+            } else if (route.name === t('Settings')) {
+              iconName = 'settings-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: '#A557F5',
+          tabBarInactiveTintColor: 'gray',
+          tabBarStyle: {
+            backgroundColor: '#fff',
+            paddingBottom: 5,
+            height: 60,
+          },
+          tabBarLabelStyle: {
+            fontSize: 12,
+          },
+        })}
+      >
+        <Tab.Screen name={t('Dashboard')} component={TeacherDashboard} options={{headerShown: false}} />
+        <Tab.Screen name={t('Classes')} component={ClassStackScreen} options={{headerShown: false}} />
+
+        <Tab.Screen name={t('Messages')} component={MessagesTeacherStackScreen}options={{headerShown: false}} />
+        <Tab.Screen name={t('Settings')} component={SettingsScreen} options={{headerShown: false}} />
+
+      </Tab.Navigator>
+      </AuthProvider>
+
+      </Provider>
+
+  );
+};
+
+const BottomTabNavigatorStudent = () => {
+  const { t } = useTranslation(); 
+
+  const [session, setSession] = useState<Session | null>(null);
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName = '';
+
+          if (route.name === t('Home')) {
+            iconName = 'home-outline';
+          } else if (route.name === t('Games')) {
+            iconName = 'game-controller-outline';
+          } 
+          else if (route.name === t('Tutorials')) {
+            iconName = 'book-outline';
+          } 
+          else if (route.name === t('Progress')) {
+            iconName = 'bar-chart-outline';
+          } else if (route.name === t('Lessons')) {
+            iconName = 'school-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#A557F5',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          paddingBottom: 5,
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+      })}
+    >
+      <Tab.Screen name={t('Home')} component={StudentHome} options={{headerShown: false}}/>
+      <Tab.Screen name={t('Games')} component={GamesStackScreen} options={{headerShown: false}} />
+
+      <Tab.Screen name={t('Tutorials')} component={StudentLiveStreamsScreen}options={{headerShown: false}} />
+      <Tab.Screen name={t('Progress')} component={ProgressStudentStackScreen}options={{headerShown: false}} />
+
+      <Tab.Screen name={t('Lessons')} component={LessonsStudentScreen} options={{headerShown: false}} />
+
+    </Tab.Navigator>
+  );
+};
+
+
+
+const BottomTabNavigatorParent = () => {
+  const { t } = useTranslation(); 
+
+  return (
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        tabBarIcon: ({ color, size }) => {
+          let iconName = '';
+
+          if (route.name === t('Dashboard')) {
+            iconName = 'home-outline';
+          } else if (route.name === t('Activities')) {
+            iconName = 'calendar-outline';
+          } 
+          else if (route.name === t('Progress')) {
+            iconName = 'analytics-outline';
+          } else if (route.name === t('Control')) {
+            iconName = 'settings-outline';
+          }
+
+          return <Ionicons name={iconName} size={size} color={color} />;
+        },
+        tabBarActiveTintColor: '#A557F5',
+        tabBarInactiveTintColor: 'gray',
+        tabBarStyle: {
+          backgroundColor: '#fff',
+          paddingBottom: 5,
+          height: 60,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+        },
+      })}
+    >
+     <Tab.Screen name={t('Dashboard')} component={ParentHome} options={{ headerShown: false }} />
+      <Tab.Screen name={t('Activities')} component={ActivityParentScreen} options={{ headerShown: false }} />
+      <Tab.Screen name={t('Progress')} component={ProgressParentStack} options={{ headerShown: false }} />
+      <Tab.Screen name={t('Control')} component={ControlParentStackScreen} options={{ headerShown: false }} />
+
+    </Tab.Navigator>
+  );
+};
+
+
+
+
+
+
 
 // function CustomDrawerContent(props) {
 //   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
@@ -351,444 +814,3 @@ interface UserProfile {
 //     fontSize: 16,
 //   },
 // });
-
-
-
-function ClassStackScreen() {
-  return (
-    <ClassStack.Navigator screenOptions={{headerShown: false}}>
-      
-        <ClassStack.Screen name ="Classes" component={ClassesScreen} options={{headerShown : false }} />
-        <ClassStack.Screen name="CreateClass" component={CreateClassScreen} />
-        <ClassStack.Screen name="NextCreateClass" component={NextCreateClass} options={{ headerShown: false }}  /> 
-        <ClassStack.Screen name="PrograssClass" component={PrograssClassScreen} options={{ headerShown: false }}
-         />
-        <ClassStack.Screen
-        name="Lessons"
-        component={LessonsScreen}
-        options={{ headerShown: false }}
-
-      />
-      <ClassStack.Screen
-        name="StudentsClass"
-        component={StudentsClassScreen}
-        options={{ headerShown: false }}
-        
-      />
-        <ClassStack.Screen
-        name="sessionNavigator"
-        component={sessionNavigator}
-        options={{ headerShown: false }}
-      />
-       <ClassStack.Screen
-        name="Activity"
-        component={ActivityScreen}
-        options={{ headerShown: false }}
-      />
-      <ClassStack.Screen
-        name="ChatScreen"
-        component={ChatScreen}
-        options={{ headerShown: false }}
-      />
-      <ClassStack.Screen name="ConversationsScreen" component={ConversationsScreen} />
-      <ClassStack.Screen name="AddStudent" component={AddStudent} />
-      <ClassStack.Screen name="ClassCode" component={ClassCode} />
-      <ClassStack.Screen
-        name="Assignments"
-        component={Assignments}
-        options={{ headerShown: false }}
-        
-      />
-       <ClassStack.Screen
-        name="ChallengesScreen"
-        component={ChallengesScreen}
-        options={{ headerShown: false }}
-        
-      />
-
-       <ClassStack.Screen
-        name="AssignmentDetailsScreen"
-        component={AssignmentsDetailsScreen}
-        options={{ headerShown: false }}
-        
-      />
-        <ClassStack.Screen
-        name="CreateAssignmentScreen"
-        component={CreateAssignmentScreen}
-        options={{ headerShown: false }}
-        
-      />
-          <ClassStack.Screen
-        name="EditChallengeScreen"
-        component={EditChallengeScreen}
-        options={{ headerShown: false }}
-        
-      />
-        <ClassStack.Screen
-        name="CreateChallengeScreen"
-        component={CreateChallengeScreen}
-        options={{ headerShown: false }}
-        
-      />
-
-
-       <ClassStack.Screen
-        name="LiveTeacherScreen"
-
-        component={ () => <LiveTeacherScreen />}
-        options={{ headerShown: false }}
-      />
-      
-      <ClassStack.Screen
-        name="AddCourse"
-        component={AddCourse}
-        options={{ headerShown: false }}
-
-
-        
-      />
-    </ClassStack.Navigator>
-  );
-}
-
-function GamesStackScreen() {
-  return (
-    <GamesStack.Navigator screenOptions={{headerShown: false}}>
-          <GamesStack.Screen name="GamesScreen" component={GamesScreen} options={{headerShown: false}} />
-        <GamesStack.Screen name ="Multiplayer" component={MultiplayerGamesScreen} options={{headerShown : false }} />
-        <GamesStack.Screen name="SinglePlayer" component={SinglePlayer} />
-        <GamesStack.Screen name="ImageRecognitionGames" component={ImageRecognitionGames} options={{ headerShown: false }}  /> 
-        {/* <GamesStack.Screen name="PrograssClass" component={PrograssClassScreen} options={{ headerShown: false }}
-         /> */}
-        <GamesStack.Screen name="GamesDiffrentScreen" component={GamesDiffrentScreen} options={{ headerShown: false }} />
-      <GamesStack.Screen name="AdminRecognition" component={AdminRecognition} options={{ headerShown: false }}  />
-
-      <GamesStack.Screen name="OfflineGamesScreen" component={OfflineGamesScreen} options={{ headerShown: false }} />
-            {/* <ClassStack.Screen
-        name="CodeCombatCourses"
-        component={CodeCombatCourses}
-      /> */}
-
-    </GamesStack.Navigator>
-  );
-}
-//ChildManagement
-
-function MessagesTeacherStackScreen() {
-  return (
-    <MessagesTeacherStack.Navigator screenOptions={{headerShown: false}}>
-        <MessagesTeacherStack.Screen name="Messages" component={MessagesScreen} options={{headerShown: false}} />
-        <MessagesTeacherStack.Screen name ="ChatConversationScreen" component={ChatConversationScreen} options={{headerShown : false }} />
-       
-    </MessagesTeacherStack.Navigator>
-  );
-}
-
-function ControlParentStackScreen() {
-  return (
-    <ControlParentStack.Navigator screenOptions={{headerShown: false}}>
-        <ControlParentStack.Screen name="ChildManagement" component={ChildManagement} options={{headerShown: false}} />
-        <ControlParentStack.Screen name ="ControlParentScreen" component={ControlParentScreen} options={{headerShown : false }} />
-        <ControlParentStack.Screen name ="AddChild" component={AddChild} options={{headerShown : false }} />
-        <ControlParentStack.Screen name ="EditChild" component={EditChild} options={{headerShown : false }} />
-
-    </ControlParentStack.Navigator>
-  );
-}
-
-
-
-function ProgressStudentStackScreen() {
-  return (
-    <ProgressStudentStack.Navigator screenOptions={{headerShown: false}}>
-        <ProgressStudentStack.Screen name="ProgressStudent" component={ProgressStudentScreen} options={{headerShown: false}} />
-        <ProgressStudentStack.Screen name ="CompletedCourses" component={CompletedCourses} options={{headerShown : false }} />
-        <ProgressStudentStack.Screen name ="CompletedGames" component={CompletedGames} options={{headerShown : false }} />
-
-       
-    </ProgressStudentStack.Navigator>
-  );
-}
-
-export default function App() {
-  const [session, setSession] = useState<Session | null>(null);
-  
-  const [fontsLoaded] = useFonts({
-    "Lexend-Regular": require("./assets/fonts/Lexend-Regular.ttf"),
-    "Lexend-SemiBold": require("./assets/fonts/Lexend-SemiBold.ttf"),
-    "Lexend-Bold": require("./assets/fonts/Lexend-Bold.ttf"),
-    "Manrope-Light": require("./assets/fonts/Manrope-Light.ttf"),
-    "Manrope-Regular": require("./assets/fonts/Manrope-Regular.ttf"),
-    "Manrope-Medium": require("./assets/fonts/Manrope-Medium.ttf"),
-    "Manrope-SemiBold": require("./assets/fonts/Manrope-SemiBold.ttf"),
-    "Manrope-Bold": require("./assets/fonts/Manrope-Bold.ttf"),
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-    "Roboto-Medium": require("./assets/fonts/Roboto-Medium.ttf"),
-    "Roboto-Bold": require("./assets/fonts/Roboto-Bold.ttf"),
-    "PlusJakartaSans-Regular": require("./assets/fonts/PlusJakartaSans-Regular.ttf"),
-    "PlusJakartaSans-Medium": require("./assets/fonts/PlusJakartaSans-Medium.ttf"),
-    "PlusJakartaSans-SemiBold": require("./assets/fonts/PlusJakartaSans-SemiBold.ttf"),
-    "PlusJakartaSans-Bold": require("./assets/fonts/PlusJakartaSans-Bold.ttf"),
-    "PlusJakartaSans-ExtraBold": require("./assets/fonts/PlusJakartaSans-ExtraBold.ttf"),
-    "Inter-Regular": require("./assets/fonts/Inter-Regular.ttf"),
-    "Inter-Medium": require("./assets/fonts/Inter-Medium.ttf"),
-    "Inter-SemiBold": require("./assets/fonts/Inter-SemiBold.ttf"),
-    "Inter-Bold": require("./assets/fonts/Inter-Bold.ttf"),
-    "Epilogue-Regular": require("./assets/fonts/Epilogue-Regular.ttf"),
-    "Epilogue-Bold": require("./assets/fonts/Epilogue-Bold.ttf"),
-    "Epilogue-ExtraBold": require("./assets/fonts/Epilogue-ExtraBold.ttf"),
-    "Epilogue-Black": require("./assets/fonts/Epilogue-Black.ttf"),
-    "Lato-Light": require("./assets/fonts/Lato-Light.ttf"),
-    "Lato-Bold": require("./assets/fonts/Lato-Bold.ttf"),
-  });
-
-
-  useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-    };
-
-    getSession();
-
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
-
-    const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log('Notification received!', notification);
-    });
-
-    return () => {
-      authListener.subscription.unsubscribe();
-      subscription.remove();
-    };
-  }, []);
-
-  return (
-      <Provider store={store}>
-        <AppProvider>
-        <NavigationContainer>
-
-      {/* {session ? (
-        
-      ):( */}
-
-        <Stack.Navigator initialRouteName="StarterPage" >
-        {/* <DrawerNavigator /> */}
-        
-          <Stack.Screen 
-            name="StarterPage" 
-            component={StarterPage} 
-            options={{ headerShown: false }} 
-          />
-           <Stack.Screen 
-            name="AccountTypeSelection" 
-            component={AccountTypeSelectionScreen} 
-            options={{ headerShown: false }} 
-          />
-          <Stack.Screen 
-            name="SignUp"
-            component={SignUp} 
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen 
-            name="Auth" 
-            component={Auth} 
-            options={{ headerShown: false }} 
-          />
-          
-          <Stack.Screen 
-            name="AgeSelection" 
-            component={AgeSelectionScreen} 
-            options={{ headerShown: false }} 
-          />
-          <Stack.Screen 
-            name="ClassCodeScreen" 
-            component={ClassCodeScreen} 
-            options={{ headerShown: false }} 
-          />
-            <Stack.Screen 
-            name="TeacherDetails" 
-            component={TeacherDetails}  
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen 
-            name="TeacherDashboard" 
-            component={BottomTabNavigator} 
-            options={{ headerShown: false }} 
-          />
-          <Stack.Screen name="StudentHome" component={BottomTabNavigatorStudent} options={{ headerShown: false }} 
-          />
-          <Stack.Screen name="DetailsParent" component={DetailsParent} options={{ headerShown: false }} />
-          <Stack.Screen name="ParentHome" component={BottomTabNavigatorParent} options={{ headerShown: false }} /> 
-          <Stack.Screen name="ProfileStudent" component={ProfileStudent} />
-          <Stack.Screen name="ProfileParent" component={ProfileParent} options={{ headerShown: false }} />
-          <Stack.Screen name="ProfileTeacher" component={ProfileTeacher} options={{ headerShown: false }} />
-          <Stack.Screen name="NotificationsScreen"  component={NotificationsScreen}  
-            options={{
-              drawerLabel: 'Notifications',
-              drawerIcon: () => <Ionicons name="notifications-outline" size={22} color="#FFF" />,
-            }} />
-
-          <Stack.Screen 
-              name="DrawerNavigator" 
-              component={DrawerNavigator} 
-              options={{ headerShown: false }} 
-            />
-          </Stack.Navigator>
-          
-        {/* // ) : (
-        //     <DrawerNavigator />
-
-        //    )} */}
-     
-      </NavigationContainer>
-      </AppProvider>
-
-      </Provider>
-          
-    );
-  }
-
-  const BottomTabNavigator = () => {
-    return (
-      <Provider store={store}>
-            <AuthProvider>
-
-
-      <Tab.Navigator
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ color, size }) => {
-            let iconName = '';
-
-            if (route.name === 'Dashboard') {
-              iconName = 'grid-outline';
-            } else if (route.name === 'Classes') {
-              iconName = 'book-outline';
-            } else if (route.name === 'Messages') {
-              iconName = 'chatbubble-ellipses-outline';
-            } else if (route.name === 'Settings') {
-              iconName = 'settings-outline';
-            }
-
-            return <Ionicons name={iconName} size={size} color={color} />;
-          },
-          tabBarActiveTintColor: '#A557F5',
-          tabBarInactiveTintColor: 'gray',
-          tabBarStyle: {
-            backgroundColor: '#fff',
-            paddingBottom: 5,
-            height: 60,
-          },
-          tabBarLabelStyle: {
-            fontSize: 12,
-          },
-        })}
-      >
-        <Tab.Screen name="Dashboard" component={TeacherDashboard} options={{headerShown: false}} />
-        <Tab.Screen name="Classes" component={ClassStackScreen} options={{headerShown: false}} />
-
-        <Tab.Screen name="Messages" component={MessagesTeacherStackScreen}options={{headerShown: false}} />
-        <Tab.Screen name="Settings" component={SettingsScreen} options={{headerShown: false}} />
-
-      </Tab.Navigator>
-      </AuthProvider>
-
-      </Provider>
-
-  );
-};
-
-const BottomTabNavigatorStudent = () => {
-  const [session, setSession] = useState<Session | null>(null);
-
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = '';
-
-          if (route.name === 'Home') {
-            iconName = 'home-outline';
-          } else if (route.name === 'Games') {
-            iconName = 'game-controller-outline';
-          } 
-          else if (route.name === 'Tutorials') {
-            iconName = 'book-outline';
-          } 
-          else if (route.name === 'Progress') {
-            iconName = 'bar-chart-outline';
-          } else if (route.name === 'Lessons') {
-            iconName = 'school-outline';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#A557F5',
-        tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          backgroundColor: '#fff',
-          paddingBottom: 5,
-          height: 60,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-        },
-      })}
-    >
-      <Tab.Screen name="Home" component={StudentHome} options={{headerShown: false}}/>
-      <Tab.Screen name="Games" component={GamesStackScreen} options={{headerShown: false}} />
-
-      <Tab.Screen name="Tutorials" component={StudentLiveStreamsScreen}options={{headerShown: false}} />
-      <Tab.Screen name="Progress" component={ProgressStudentStackScreen}options={{headerShown: false}} />
-
-      <Tab.Screen name="Lessons" component={LessonsStudentScreen} options={{headerShown: false}} />
-
-    </Tab.Navigator>
-  );
-};
-
-
-
-const BottomTabNavigatorParent = () => {
-  return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName = '';
-
-          if (route.name === 'Dashboard') {
-            iconName = 'home-outline';
-          } else if (route.name === 'Activities') {
-            iconName = 'calendar-outline';
-          } 
-          else if (route.name === 'Progress') {
-            iconName = 'analytics-outline';
-          } else if (route.name === 'Control') {
-            iconName = 'settings-outline';
-          }
-
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: '#A557F5',
-        tabBarInactiveTintColor: 'gray',
-        tabBarStyle: {
-          backgroundColor: '#fff',
-          paddingBottom: 5,
-          height: 60,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-        },
-      })}
-    >
-     <Tab.Screen name="Dashboard" component={ParentHome} options={{ headerShown: false }} />
-      <Tab.Screen name="Activities" component={ActivityParentScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Progress" component={ProgressParentScreen} options={{ headerShown: false }} />
-      <Tab.Screen name="Control" component={ControlParentStackScreen} options={{ headerShown: false }} />
-
-    </Tab.Navigator>
-  );
-};
-

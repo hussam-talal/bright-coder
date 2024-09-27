@@ -3,6 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList, ActivityIndicator, Alert } from 'react-native';
 import * as WebBrowser from 'expo-web-browser';
 import Header from '../../../components/Header';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { AuthStackParamList } from '../../../lib/routeType';
+import { useNavigation } from '@react-navigation/native';
+
+type CreateGamesNavigationProp = StackNavigationProp<AuthStackParamList>;
 
 // تعريف لواجهة اللعبة
 interface Game {
@@ -13,11 +18,13 @@ interface Game {
   slug: string;
 }
 
-const API_KEY = 'f1fcd3146b8a4360bb9dbb6aae20a076'; // استخدم API Key الخاص بك هنا
+const API_KEY = 'f1fcd3146b8a4360bb9dbb6aae20a076'; // Use your API Key here
 
 const MultiplayerGamesScreen = () => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const navigation = useNavigation<CreateGamesNavigationProp>();
+
 
   useEffect(() => {
     const fetchGames = async () => {
@@ -30,7 +37,7 @@ const MultiplayerGamesScreen = () => {
         }
 
         const data = await response.json();
-        console.log('API response data:', data); // سجل الاستجابة للتحقق منها
+        console.log('API response data:', data); // Response log for verification
 
         if (data.results && data.results.length > 0) {
           const fetchedGames = data.results.map((game: any) => ({
@@ -98,7 +105,7 @@ const MultiplayerGamesScreen = () => {
       ) : (
         <Text style={styles.noGamesText}>No games available at the moment.</Text>
       )}
-      <TouchableOpacity style={styles.createGameButton}>
+      <TouchableOpacity style={styles.createGameButton} onPress={() => navigation.navigate('CreateInteractiveGameScreen')}>
         <Text style={styles.createGameButtonText}>Create Game</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.joinGameButton}>

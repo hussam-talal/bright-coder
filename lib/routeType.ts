@@ -66,7 +66,7 @@ export type AuthStackParamList = {
   GamesScreen: undefined;
   CoursesScreen: undefined;
   GamesDiffrentScreen: undefined;
-
+  CreateInteractiveGameScreen: undefined;
   
  // LessonStudentScreen: undefined;
   ProgramStudentScreen: undefined;
@@ -128,6 +128,7 @@ export type AuthStackParamList = {
   ControlParentScreen:{ childId: any};
   AddChild: undefined;  
   ChildManagement: undefined;
+  ProgressParent:undefined;
 
   DrawerNavigator:undefined;
   StarterPage: undefined;

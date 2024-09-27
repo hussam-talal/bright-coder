@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Pressable, Alert } from 'react-native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../lib/routeType'; 
 import { supabase } from '../../lib/supabase'; 
+import { getAuth } from 'firebase/auth'; // استيراد Firebase Auth
 
 type NextCreateClassScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'NextCreateClass'>;
 
@@ -34,12 +35,14 @@ const NextCreateClassScreen = ({ navigation, route }: Props) => {
     }
 
     try {
-      const { data: user, error: userError } = await supabase.auth.getUser();
-      const classCode = generateClassCode();
+      const auth = getAuth();
+      const user = auth.currentUser; // جلب المستخدم الحالي من Firebase
 
-      if (userError || !user) {
-        throw new Error("Unable to fetch user");
+      if (!user) {
+        throw new Error("Unable to fetch user. Please log in.");
       }
+
+      const classCode = generateClassCode();
 
       const { data, error } = await supabase
         .from('classes')
@@ -50,7 +53,7 @@ const NextCreateClassScreen = ({ navigation, route }: Props) => {
             age_group: selectedAge,
             capacity: capacity,
             level: selectedLevel,
-            teacher_id: user.user?.id,
+            teacher_id: user.uid, // استخدام UID من Firebase بدلاً من Supabase
             status: 'active',
             start_date: new Date().toISOString().split('T')[0],
             schedule: JSON.stringify(selectedDays),

@@ -1,5 +1,6 @@
 import { LiveSessionType } from './routeType';
 import { supabase } from './supabase';
+import { getAuth } from 'firebase/auth'; // استيراد Firebase Auth
 
 interface CourseProgress {
   id: number;
@@ -1600,20 +1601,19 @@ export async function sendMessage(conversationId: any, messageText: string, isTe
 }
 
 
-
 export const fetchProgress = async () => {
   try {
-    // الحصول على الجلسة الحالية
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) throw sessionError;
+    // الحصول على المستخدم الحالي من Firebase
+    const auth = getAuth();
+    const user = auth.currentUser;
 
-    const user = sessionData?.session?.user;
     if (!user) throw new Error('User not found');
 
+    // استخدام معرف المستخدم من Firebase للوصول إلى البيانات في Supabase
     const { data, error } = await supabase
       .from('progress')
       .select('current, learning')
-      .eq('user_id', user.id)
+      .eq('user_id', user.uid) // استخدام user.uid من Firebase بدلاً من user.id
       .single();
 
     if (error) throw error;
@@ -1623,6 +1623,7 @@ export const fetchProgress = async () => {
     return { current: 0, learning: 0 };
   }
 };
+
 
 // جلب جميع التحديات
 export const fetchChallenges = async (classId: any): Promise<Challenge[]> => {
@@ -1824,26 +1825,28 @@ export const fetchAssignmentDetails = async (assignmentId: number): Promise<Assi
 
 export const fetchBadges = async () => {
   try {
-    // الحصول على جلسة المستخدم
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) throw sessionError;
+    // الحصول على Firebase Auth المستخدم الحالي
+    const auth = getAuth();
+    const firebaseUser = auth.currentUser;
 
-    const user = sessionData?.session?.user;
-    if (!user) throw new Error('User not found');
+    if (!firebaseUser) throw new Error('User not logged in');
 
+    const firebaseUID = firebaseUser.uid;
+
+    // البحث عن الأوسمة (badges) للمستخدم باستخدام uid من Firebase
     const { data, error } = await supabase
       .from('badges')
       .select('*')
-      .eq('user_id', user.id);
+      .eq('user_id', firebaseUID); // نستخدم Firebase UID
 
     if (error) throw error;
+
     return data;
   } catch (error) {
     console.error('Error fetching badges:', error);
     return [];
   }
 };
-
 
 // export const fetchCourseProgress = async () => {
 //   try {

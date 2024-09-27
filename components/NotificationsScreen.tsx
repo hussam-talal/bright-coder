@@ -69,7 +69,7 @@ const NotificationsScreen: React.FC = () => {
 
   return (
     <View style={styles.container1}>
-        <Header title="Image Recognition" />
+        <Header title="Notifications" />
     <View style={styles.container}>
       <FlatList
         data={notifications}

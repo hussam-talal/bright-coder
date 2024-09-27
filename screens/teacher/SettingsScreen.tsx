@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Switch, Image, Alert, ActivityIndicator } from 'react-native';
 import Header from '../../components/Header';
-import { useAuth } from '../../screens/teacher/AuthContext'; 
+import { getAuth } from 'firebase/auth';  // استيراد Firebase Auth
 import { supabase } from '../../lib/supabase'; 
 
 export default function TeacherSettings() {
-  const { user, signOut } = useAuth(); 
+  const auth = getAuth();
+  const user = auth.currentUser;  // جلب المستخدم الحالي من Firebase
   const [profile, setProfile] = useState<any>(null);
   const [notifications, setNotifications] = useState({
     classChanges: true,
@@ -21,13 +22,13 @@ export default function TeacherSettings() {
         const { data, error } = await supabase
           .from('profiles')
           .select('id, full_name, email, avatar_url')
-          .eq('id', user?.id)
+          .eq('id', user?.uid)  // استخدام UID من Firebase
           .single();
 
         if (error) throw error;
 
         setProfile(data);
-      } catch (error: any) { // تحديد نوع 'error' كـ 'any'
+      } catch (error: any) { 
         console.error('Error fetching profile:', error.message);
         Alert.alert('Error', 'Failed to fetch profile information.');
       } finally {
@@ -55,10 +56,10 @@ export default function TeacherSettings() {
       const { error } = await supabase
         .from('notifications_settings')
         .update({ [type]: newValue })
-        .eq('user_id', user?.id);
+        .eq('user_id', user?.uid);  // استخدام UID من Firebase
 
       if (error) throw error;
-    } catch (error: any) { // تحديد نوع 'error' كـ 'any'
+    } catch (error: any) { 
       console.error('Error updating notification settings:', error.message);
       Alert.alert('Error', 'Failed to update notification settings.');
     }
@@ -66,7 +67,7 @@ export default function TeacherSettings() {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await auth.signOut();  // استخدام Firebase signOut
       Alert.alert("Logged out", "You have been logged out successfully.");
     } catch (error: any) { 
       console.error("Failed to sign out:", error.message);

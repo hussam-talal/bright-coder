@@ -40,32 +40,37 @@ export default function ControlParentScreen() {
   const fetchControlData = async () => {
     try {
       setLoading(true);
-
+  
       const { data, error } = await supabase
         .from('parental_controls')
         .select('*')
         .eq('student_id', childId)
         .eq('parent_id', parentId)
-        .single();
-
+        .maybeSingle(); // تغيير .single() إلى .maybeSingle()
+  
       if (error) {
         throw error;
       }
-
-      setControlData(data);
-      setScreenTimeLimit(data.screen_time_limit || 2);
-      setRestrictContent({
-        violentGames: data.restrict_multiplayer,
-        inappropriateContent: data.restrict_live_sessions,
-        socialMedia: false, // Adding new control
-      });
-
+  
+      if (data) {
+        setControlData(data);
+        setScreenTimeLimit(data.screen_time_limit || 2);
+        setRestrictContent({
+          violentGames: data.restrict_multiplayer,
+          inappropriateContent: data.restrict_live_sessions,
+          socialMedia: false, // Adding new control
+        });
+      } else {
+        console.log("No parental control data found.");
+      }
+  
     } catch (error) {
       console.error('Error fetching parental controls:', error);
     } finally {
       setLoading(false);
     }
   };
+  
 
   const updateParentalControls = async () => {
     try {

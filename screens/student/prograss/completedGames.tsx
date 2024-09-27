@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, ProgressBarAndroid } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, TextInput, ProgressBar } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { fetchImageRecognitionProgress } from '../../../lib/CRUD'; 
 import Header from '../../../components/Header';
@@ -32,7 +32,7 @@ const CompletedGamesScreen = () => {
     <View style={styles.gameContainer}>
       <Text style={styles.gameTitle}>{item.game_name}</Text>
       <Text style={styles.gameCompletion}>Completion: {item.score}%</Text>
-      <ProgressBarAndroid 
+      <ProgressBar 
         styleAttr="Horizontal" 
         color="#f08cfc" 
         indeterminate={false} 
@@ -48,27 +48,27 @@ const CompletedGamesScreen = () => {
   );
 
   const filteredGames = games.filter(game =>
-    game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
+    game.game_name && game.game_name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.container1}>      
       <Header title='Completed Games' />
-    <View style={styles.container}>
-      <TextInput
-        style={styles.searchInput}
-        placeholder="Search ..."
-        placeholderTextColor="#888"
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
-      <FlatList
-        data={filteredGames}
-        renderItem={renderGame}
-        keyExtractor={item => item.game_id.toString()}
-        contentContainerStyle={styles.gameList}
-      />
-    </View>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Search ..."
+          placeholderTextColor="#888"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <FlatList
+          data={filteredGames}
+          renderItem={renderGame}
+          keyExtractor={item => item.game_id.toString()}
+          contentContainerStyle={styles.gameList}
+        />
+      </View>
     </View>
   );
 };

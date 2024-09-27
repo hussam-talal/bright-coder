@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { AuthStackParamList } from '../../lib/routeType';
+import { getAuth } from 'firebase/auth';
 
 type ProgressParentNavigationProp = StackNavigationProp<AuthStackParamList>;
 
@@ -32,13 +33,15 @@ export default function ProgressParentScreen() {
     try {
       setLoading(true);
 
-      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      // الحصول على المستخدم الحالي من Firebase Auth
+      const auth = getAuth();
+      const currentUser = auth.currentUser;
 
-      if (sessionError) {
-        throw new Error('Error retrieving parent session');
+      if (!currentUser) {
+        throw new Error('Parent session ended.');
       }
 
-      const parentId = session?.user?.id;
+      const parentId = currentUser.uid;
 
       if (!parentId) {
         throw new Error('Parent is not logged in');

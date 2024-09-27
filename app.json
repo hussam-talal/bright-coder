@@ -11,13 +11,16 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "icon": "./assets/icons/appstore.png",
-      "assetBundlePatterns": [
-        "**/*"
-      ],
-      "bundleIdentifier": "com.brightcoder.brightcodersapp"
+      "bundleIdentifier": "com.brightcoder.brightcodersapp",
+      "runtimeVersion": {
+        "policy": "appVersion"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -35,6 +38,12 @@
         "projectId": "19f5e061-84ef-4ac9-815c-004a61946da0"
       }
     },
-    "owner": "brightcoder"
+    "owner": "brightcoder",
+    "plugins": [
+      "expo-localization"
+    ],
+    "updates": {
+      "url": "https://u.expo.dev/19f5e061-84ef-4ac9-815c-004a61946da0"
+    }
   }
 }
