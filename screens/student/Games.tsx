@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import Header from '../../components/Header'; // استدعاء Header من الملف المنفصل
+import Header from '../../components/Header'; 
 import { AuthStackParamList } from '../../lib/routeType'; // Adjust the import path as needed
 import { StackNavigationProp } from '@react-navigation/stack';
 
@@ -12,9 +12,9 @@ export default function LearningMode() {
   const navigation = useNavigation<LearningModeNavigationProp>();
 
   return (
-    <View style={styles.container}>
+    <View style={styles.container1}> 
       <Header title='Select Learning Mode' />
-      {/* <Text style={styles.title}>Select Learning Mode</Text> */}
+    <View style={styles.container}>
 
       <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Multiplayer')}>
         <Ionicons name="people-outline" size={24} color="#fff" />
@@ -39,12 +39,16 @@ export default function LearningMode() {
         <Text style={styles.backButtonText}>Back</Text>
       </TouchableOpacity>
 
-      
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container1: {
+    flex: 1,
+
+  },
   container: {
     flex: 1,
     backgroundColor: '#f5f5f5',

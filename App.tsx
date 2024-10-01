@@ -103,6 +103,7 @@ import CreateInteractiveGameScreen from "./screens/student/games/CreateInteracti
 import { useTranslation } from 'react-i18next'; 
 import './lib/i18n';
 import 'intl-pluralrules';
+import TextGames from "./screens/student/games/TextGames";
 
 // إعدادات الإشعارات
 Notifications.setNotificationHandler({
@@ -239,13 +240,14 @@ function GamesStackScreen() {
         <GamesStack.Screen name="ImageRecognitionGames" component={ImageRecognitionGames} options={{ headerShown: false }}  /> 
         <GamesStack.Screen name="CreateInteractiveGameScreen" component={CreateInteractiveGameScreen} options={{ headerShown: false }}/>
         <GamesStack.Screen name="GamesDiffrentScreen" component={GamesDiffrentScreen} options={{ headerShown: false }} />
-      <GamesStack.Screen name="AdminRecognition" component={AdminRecognition} options={{ headerShown: false }}  />
+        <GamesStack.Screen name="AdminRecognition" component={AdminRecognition} options={{ headerShown: false }}  />
 
-      <GamesStack.Screen name="OfflineGamesScreen" component={OfflineGamesScreen} options={{ headerShown: false }} />
+        <GamesStack.Screen name="TextGames" component={TextGames} options={{ headerShown: false }} />
             {/* <ClassStack.Screen
         name="CodeCombatCourses"
         component={CodeCombatCourses}
       /> */}
+      
 
     </GamesStack.Navigator>
   );

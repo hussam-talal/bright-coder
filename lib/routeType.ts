@@ -76,7 +76,7 @@ export type AuthStackParamList = {
   CompletedCourses: undefined;
   CompletedGames: undefined;
   ProgressStudent: undefined;
-  
+  TextGames: undefined;
  
     LiveSession: LiveSessionType; 
     CreateNewSession: undefined; 

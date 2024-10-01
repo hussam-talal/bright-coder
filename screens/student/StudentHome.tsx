@@ -1,152 +1,3 @@
-// import React, { useEffect, useState } from 'react';
-// import { View, Text, StyleSheet, Image, ScrollView } from 'react-native';
-// import { supabase } from '../../lib/supabase'; // Assuming you have a supabase client instance
-
-// export default function StudentHome() {
-//   const [studentData, setStudentData] = useState<any>(null); // Replace `any` with the actual type of student data
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     const fetchStudentData = async () => {
-//       try {
-//         // Fetch the logged-in user's ID
-//         const {
-//           data: { user },
-//         } = await supabase.auth.getUser();
-
-//         if (!user) {
-//           console.log('User is not logged in');
-//           return;
-//         }
-
-//         const { data: studentProfile, error } = await supabase
-//           .from('profiles')
-//           .select('*')
-//           .eq('id', user.id)
-//           .single();
-
-//         if (error) {
-//           throw error;
-//         }
-
-//         setStudentData(studentProfile);
-//       } catch (error) {
-//         console.error('Error fetching student data:', error);
-//       } finally {
-//         setLoading(false);
-//       }
-//     };
-
-//     fetchStudentData();
-//   }, []);
-
-//   if (loading) {
-//     return <Text>Loading...</Text>;
-//   }
-
-//   if (!studentData) {
-//     return <Text>No student data found</Text>;
-//   }
-
-//   return (
-//     <ScrollView style={styles.container}>
-//       <Text style={styles.title}>Bright Coders</Text>
-
-//       <View style={styles.section}>
-//         <Text style={styles.sectionTitle}>Current Progress</Text>
-//         <View style={styles.progressBar}>
-//           {/* Progress Bar logic */}
-//         </View>
-//       </View>
-
-//       <View style={styles.section}>
-//         <Text style={styles.sectionTitle}>Upcoming Challenges</Text>
-//         {/* Map through the challenges and display them */}
-//         {/* {studentData.upcomingChallenges.map((challenge: any, index: number) => (
-//           <View key={index} style={styles.challenge}>
-//             <Text style={styles.challengeTitle}>{challenge.title}</Text>
-//             <Text style={styles.challengeSubtitle}>{`Challenge: ${challenge.subtitle}`}</Text>
-//             <Text style={styles.challengeDate}>{`Due: ${challenge.dueDate}`}</Text>
-//           </View>
-//         ))} */}
-//       </View>
-
-//       <View style={styles.section}>
-//         <Text style={styles.sectionTitle}>Learning Progress</Text>
-//         <View style={styles.progressBar}>
-//           {/* Learning Progress Bar logic */}
-//         </View>
-//       </View>
-
-//       <View style={styles.section}>
-//         <Text style={styles.sectionTitle}>Achievement Badges</Text>
-//         <View style={styles.badges}>
-//           {/* {studentData.badges.map((badge: any, index: number) => (
-//             <Image key={index} source={{ uri: badge.image }} style={styles.badgeImage} />
-//           ))} */}
-//         </View>
-//       </View>
-//     </ScrollView>
-//   );
-// }
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     backgroundColor: '#fff',
-//     padding: 20,
-//   },
-//   title: {
-//     fontSize: 24,
-//     fontWeight: 'bold',
-//     marginBottom: 20,
-//   },
-//   section: {
-//     marginBottom: 20,
-//   },
-//   sectionTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginBottom: 10,
-//   },
-//   progressBar: {
-//     height: 10,
-//     backgroundColor: '#ddd',
-//     borderRadius: 5,
-//     overflow: 'hidden',
-//   },
-//   challenge: {
-//     backgroundColor: '#f5f5f5',
-//     padding: 10,
-//     borderRadius: 10,
-//     marginBottom: 10,
-//   },
-//   challengeTitle: {
-//     fontSize: 16,
-//     fontWeight: 'bold',
-//   },
-//   challengeSubtitle: {
-//     fontSize: 14,
-//     color: '#888',
-//   },
-//   challengeDate: {
-//     fontSize: 12,
-//     color: '#aaa',
-//   },
-//   badges: {
-//     flexDirection: 'row',
-//     flexWrap: 'wrap',
-//   },
-//   badgeImage: {
-//     width: 50,
-//     height: 50,
-//     margin: 5,
-//   },
-// });
-
-
-
-
 
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, Alert, Image } from 'react-native';
@@ -157,13 +8,13 @@ import HeaderStudent from '../../components/HeaderStudent';
 
 interface CourseProgress {
   id: number;
-  user_id: string;  // نوع UUID
+  user_id: string; 
   course_id: number;
   current_level: number;
   progress_percentage: number;
   completed: boolean;
-  created_at: string;  // توقيت زمني
-  updated_at: string;  // توقيت زمني
+  created_at: string;  
+  updated_at: string; 
 }
 interface Challenge {
   id: number;
@@ -171,10 +22,10 @@ interface Challenge {
   description: string;
   difficulty_level: string;
   challenge_type: string;
-  created_by: string;  // نوع UUID
-  created_at?: string;  // قد تحتاج إلى إضافة هذا الحقل إذا كان متاحًا في الجدول
-  updated_at?: string;  // قد تحتاج إلى إضافة هذا الحقل إذا كان متاحًا في الجدول
-  due_date?: string;  // أو Date إذا كنت تستخدم النوع timestamp
+  created_by: string;  
+  created_at?: string;  
+  updated_at?: string;  
+  due_date?: string;  
 
 }
 

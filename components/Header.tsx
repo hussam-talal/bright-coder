@@ -281,7 +281,7 @@ const Header: React.FC<HeaderProps> = ({ title }) => {
           style={styles.avatar}
         />
       </TouchableOpacity>
-      <Text style={styles.headerText}>{t('Welcome')}</Text> 
+      <Text style={styles.headerText}>{t(title)}</Text> 
       <View style={styles.headerIcons}>
         <TouchableOpacity onPress={handleNotificationsPress} style={styles.notificationButton}>
           <Ionicons name="notifications-outline" style={styles.icon} />

@@ -407,6 +407,7 @@ import { AuthStackParamList } from '../lib/routeType';
 import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
 
 type SignUpScreenNavigationProp = StackNavigationProp<AuthStackParamList, 'SignUp'>;
 type SignUpScreenRouteProp = RouteProp<AuthStackParamList, 'SignUp'>;
@@ -430,7 +431,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
-const auth = getAuth(); // Initialize Firebase Auth
+const authInstance  = getAuth(); // Initialize Firebase Auth
 
 export default function SignUp({ navigation, route }: SignUpProps) {
   const role = route?.params?.role;
@@ -441,6 +442,20 @@ export default function SignUp({ navigation, route }: SignUpProps) {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState();
+
+  function onAuthStateChanged(user:any) {
+    setUser(user);
+    if (initializing) setInitializing(false);
+  }
+
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+  }, []);
+
+  if (initializing) return null;
 
   if (!role) {
     Alert.alert('Error', 'Role is not defined');
@@ -462,7 +477,7 @@ export default function SignUp({ navigation, route }: SignUpProps) {
 
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(authInstance , email, password);
       const user = userCredential.user;
 
       if (user) {
@@ -504,21 +519,18 @@ export default function SignUp({ navigation, route }: SignUpProps) {
   };
 
   // Google Sign-In flow
-  const signInWithGoogle = async () => {
+  async function signInWithGoogle() {
     try {
       await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const { idToken } = await GoogleSignin.signIn(); // Destructure idToken properly
-
-      // Create Google credential with the token
+      const { idToken } = await GoogleSignin.signIn();
       const googleCredential = GoogleAuthProvider.credential(idToken);
-      const userCredential = await signInWithCredential(auth, googleCredential); // Correct usage of signInWithCredential
-
+      const userCredential = await signInWithCredential(authInstance , googleCredential);
       const user = userCredential.user;
-      console.log('User signed in with Google:', user);
 
-      await saveUserInSupabase(user); // Save the user to Supabase after signing in with Google
-      navigationBasedOnRole(user); // Navigate based on role
+      await saveUserInSupabase(user);
+      navigationBasedOnRole(user);
     } catch (error: any) {
+      console.error('Google Sign-In Error:', error.message);
       Alert.alert('Error', error.message);
     }
   };

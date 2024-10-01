@@ -92,8 +92,7 @@ const ProgressTab: React.FC<{ courseId: number }> = ({ courseId }) => {
     <View style={styles.container1}>
         <Header title="Courses" />
     <View style={styles.container}>
-      {/* Add UI elements to display progress here */}
-      {/* Example: List of lessons with progress percentage */}
+      
       <FlatList
         data={progressData}
         keyExtractor={(item) => item.lessonId.toString()}
