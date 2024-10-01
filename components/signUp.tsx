@@ -396,7 +396,7 @@
 
 
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Text, ScrollView, Alert, ImageBackground, KeyboardAvoidingView, Platform } from 'react-native';
 import { Input, Button, Icon } from '@rneui/themed';
 import { useNavigation, RouteProp } from '@react-navigation/native';
@@ -415,6 +415,7 @@ interface SignUpProps {
   navigation: SignUpScreenNavigationProp;
   route: SignUpScreenRouteProp;
 }
+
 
 // Initialize Firebase
 const firebaseConfig = {
@@ -446,6 +447,7 @@ export default function SignUp({ navigation, route }: SignUpProps) {
     return null;
   }
 
+
   // Sign-up with email and password using Firebase Auth
   const handleSignUp = async () => {
     if (!fullName || !email || !password || !confirmPassword) {
@@ -474,7 +476,7 @@ export default function SignUp({ navigation, route }: SignUpProps) {
   };
 
   GoogleSignin.configure({
-    webClientId: '1:922642052240:android:02b0bda0079b0fd5399415',
+    webClientId: '922642052240-obesle6ea1126d88nlqugq3vqd1a054s.apps.googleusercontent.com',
   });
 
   // Save user data to Supabase
@@ -607,7 +609,9 @@ export default function SignUp({ navigation, route }: SignUpProps) {
 
             <Button
               title="Sign Up With Google"
-              onPress={signInWithGoogle}
+              onPress={() => {
+                signInWithGoogle();
+              }}
               buttonStyle={styles.googleButton}
               titleStyle={styles.socialButtonText}
               icon={{ name: 'google', type: 'font-awesome', color: '#fff', size: 20 }}
