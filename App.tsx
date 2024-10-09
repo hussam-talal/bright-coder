@@ -239,9 +239,10 @@ function GamesStackScreen() {
         <GamesStack.Screen name="CreateInteractiveGameScreen" component={CreateInteractiveGameScreen} options={{ headerShown: false }}/>
         <GamesStack.Screen name="GamesDiffrentScreen" component={GamesDiffrentScreen} options={{ headerShown: false }} />
         <GamesStack.Screen name="AdminRecognition" component={AdminRecognition} options={{ headerShown: false }}  />
+        <GamesStack.Screen name="OfflineGamesScreen" component={OfflineGamesScreen} options={{ headerShown: false }}  />
 
         <GamesStack.Screen name="TextGames" component={TextGames} options={{ headerShown: false }} />
-            {/* <ClassStack.Screen
+            {/* <ClassStack.Screen 
         name="CodeCombatCourses"
         component={CodeCombatCourses}
       /> */}

@@ -1,21 +1,35 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, FlatList, Image, Linking } from 'react-native';
+import { 
+    View, 
+    Text, 
+    StyleSheet, 
+    TextInput, 
+    TouchableOpacity, 
+    FlatList, 
+    Image, 
+    Linking 
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import Header from '../../../components/Header'; 
 import { AuthStackParamList } from '../../../lib/routeType';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { useNavigation } from '@react-navigation/native';
 
+// Define navigation prop type
 type SingleGameNavigationProp = StackNavigationProp<AuthStackParamList>;
+
+// Define the Game interface
 interface Game {
     id: string;
     name: string;
     genre: string;
     imageUrl: string;
-    url: string; // إضافة خاصية url
+    url: string;
+    description: string;
 }
 
-const educationalGames = [
+// List of educational games
+const educationalGames: Game[] = [
     {
         id: '1',
         name: 'Blockly Games',
@@ -114,68 +128,106 @@ const educationalGames = [
     },
 ];
 
+// GameCard Component
+const GameCard: React.FC<{ game: Game; onStart: (url: string) => void }> = ({ game, onStart }) => (
+    <View style={styles.gameCard}>
+        <Image source={{ uri: game.imageUrl }} style={styles.gameThumbnail} />
+        <View style={styles.gameInfoContainer}>
+            <Text style={styles.gameTitle}>{game.name}</Text>
+            <Text style={styles.gameGenre}>{game.genre}</Text>
+            <TouchableOpacity style={styles.startButton} onPress={() => onStart(game.url)}>
+                <Text style={styles.startButtonText}>Start Game</Text>
+            </TouchableOpacity>
+        </View>
+    </View>
+);
+
+// SearchBar Component
+const SearchBar: React.FC<{ value: string; onChange: (text: string) => void }> = ({ value, onChange }) => (
+    <View style={styles.searchContainer}>
+        <Ionicons name="search" size={24} color="#888" />
+        <TextInput 
+            style={styles.searchInput} 
+            placeholder="Search for a game..." 
+            placeholderTextColor="#888"
+            value={value}
+            onChangeText={onChange}
+        />
+    </View>
+);
+
+// TabBar Component
+const TabBar: React.FC<{ activeTab: string; onTabPress: (tab: string) => void }> = ({ activeTab, onTabPress }) => (
+    <View style={styles.tabContainer}>
+        <TouchableOpacity 
+            style={[styles.tab, activeTab === 'TextCode' && styles.activeTab]} 
+            onPress={() => onTabPress('TextCode')}
+        >
+            <Text style={[styles.tabText, activeTab === 'TextCode' && styles.activeTabText]}>Text Code</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+            style={[styles.tab, activeTab === 'Game' && styles.activeTab]} 
+            onPress={() => onTabPress('Game')}
+        >
+            <Text style={[styles.tabText, activeTab === 'Game' && styles.activeTabText]}>Game</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+            style={[styles.tab, activeTab === 'Offline' && styles.activeTab]} 
+            onPress={() => onTabPress('Offline')}
+        >
+            <Text style={[styles.tabText, activeTab === 'Offline' && styles.activeTabText]}>Offline</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+            style={[styles.tab, activeTab === 'EditCode' && styles.activeTab]} 
+            onPress={() => onTabPress('EditCode')}
+        >
+            <Text style={[styles.tabText, activeTab === 'EditCode' && styles.activeTabText]}>Edit Code</Text>
+        </TouchableOpacity>
+    </View>
+);
+
+// Main Component
 export default function SinglePlayer() {
     const navigation = useNavigation<SingleGameNavigationProp>();
     const [searchText, setSearchText] = useState('');
+    const [activeTab, setActiveTab] = useState('TextCode');
 
-    // تصفية الألعاب بناءً على نص البحث
+    // Filter games based on search text
     const filteredGames = educationalGames.filter(game =>
         game.name.toLowerCase().includes(searchText.toLowerCase())
     );
 
     const handleStartGame = (url: string) => {
-        // يمكنك فتح اللعبة في متصفح الويب أو داخل التطبيق
-        // مثال لفتح الرابط في المتصفح
         Linking.openURL(url);
     };
 
-    const renderGameItem = ({ item }: { item: Game }) => (
-      <View style={styles.gameCard}>
-          <Image source={{ uri: item.imageUrl }} style={styles.gameThumbnail} />
-          <View style={styles.gameInfoContainer}>
-              <Text style={styles.gameTitle}>{item.name}</Text>
-              <Text style={styles.gameGenre}>{item.genre}</Text>
-              <TouchableOpacity onPress={() => handleStartGame(item.url)}>
-                  <Text style={styles.startGameText}>Start Game</Text>
-              </TouchableOpacity>
-          </View>
-      </View>
-  );
-  
+    const handleTabPress = (tab: string) => {
+        setActiveTab(tab);
+        // Navigate based on the selected tab
+        switch(tab) {
+            case 'Game':
+                navigation.navigate('GamesDiffrentScreen');
+                break;
+            case 'Offline':
+                navigation.navigate('OfflineGamesScreen');
+                break;
+            case 'EditCode':
+                navigation.navigate('TextGames');
+                break;
+            default:
+                break;
+        }
+    };
 
     return (
         <View style={styles.container1}>      
             <Header title='Single Player' />
             <View style={styles.container}>
-                <View style={styles.searchContainer}>
-                    <Ionicons name="search" size={24} color="#888" />
-                    <TextInput 
-                        style={styles.searchInput} 
-                        placeholder="Search ..." 
-                        placeholderTextColor="#888"
-                        value={searchText}
-                        onChangeText={setSearchText}
-                    />
-                </View>
-
-                <View style={styles.tabContainer}>
-                    <TouchableOpacity style={styles.activeTab}>
-                        <Text style={styles.activeTabText}>Text Code</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('GamesDiffrentScreen')}>
-                        <Text style={styles.tabText}>Game</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('OfflineGamesScreen')}>
-                        <Text style={styles.tabText}>Offline</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.tab} onPress={() => navigation.navigate('TextGames')}> 
-                        <Text style={styles.tabText}>Edit Code</Text>
-                    </TouchableOpacity>
-                </View>
-
+                <SearchBar value={searchText} onChange={setSearchText} />
+                <TabBar activeTab={activeTab} onTabPress={handleTabPress} />
                 <FlatList
                     data={filteredGames}
-                    renderItem={renderGameItem}
+                    renderItem={({ item }) => <GameCard game={item} onStart={handleStartGame} />}
                     keyExtractor={(item) => item.id}
                     contentContainerStyle={styles.gamesContainer}
                 />
@@ -184,99 +236,100 @@ export default function SinglePlayer() {
     );
 }
 
+// Stylesheet
 const styles = StyleSheet.create({
-  container1: {
-      flex: 1,
-  },
-  container: {
-      flex: 1,
-      backgroundColor: '#f5f5f5',
-      paddingHorizontal: 20,
-      paddingVertical: 10,
-  },
-  gameCard: {
-      backgroundColor: '#fff',
-      borderRadius: 10,
-      padding: 15,
-      marginVertical: 10,
-      shadowColor: '#000',
-      shadowOpacity: 0.1,
-      shadowRadius: 5,
-      elevation: 3,
-      flexDirection: 'row',
-      alignItems: 'center',
-      width: '100%', // اجعل عرض البطاقة 100%
-  },
-  gameThumbnail: {
-      width: 100,
-      height: 100,
-      borderRadius: 10,
-      marginRight: 15,
-  },
-  gameInfoContainer: {
-      flex: 1,
-  },
-  gameTitle: {
-      fontSize: 16, // استخدام حجم موحد
-      fontWeight: 'bold',
-      marginVertical: 5,
-  },
-  gameGenre: {
-      fontSize: 14,
-      color: '#888',
-      marginBottom: 10,
-  },
-  startGameText: {
-      fontSize: 16,
-      color: '#6200ea',
-      fontWeight: 'bold',
-      textAlign: 'center',
-  },
-  searchContainer: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      backgroundColor: '#fff',
-      borderRadius: 10,
-      paddingHorizontal: 10,
-      marginVertical: 15,
-  },
-  searchInput: {
-      flex: 1,
-      fontSize: 16,
-      paddingLeft: 10,
-      color: '#000',
-  },
-  tabContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 20,
-  },
-  tab: {
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-  },
-  activeTab: {
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      borderBottomWidth: 2,
-      borderBottomColor: '#6200ea',
-  },
-  tabText: {
-      fontSize: 16,
-      color: '#888',
-  },
-  activeTabText: {
-      fontSize: 16,
-      color: '#6200ea',
-      fontWeight: 'bold',
-  },
-  gamesContainer: {
-      flexDirection: 'row',
-      flexWrap: 'wrap',
-      justifyContent: 'space-between',
-  },
+    container1: {
+        flex: 1,
+        backgroundColor: '#ffffff',
+    },
+    container: {
+        flex: 1,
+        paddingHorizontal: 20,
+        paddingTop: 10,
+    },
+    gameCard: {
+        backgroundColor: '#fff',
+        borderRadius: 15,
+        padding: 20,
+        marginVertical: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.1,
+        shadowRadius: 10,
+        elevation: 5,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    gameThumbnail: {
+        width: 80,
+        height: 80,
+        borderRadius: 10,
+        marginRight: 15,
+    },
+    gameInfoContainer: {
+        flex: 1,
+    },
+    gameTitle: {
+        fontSize: 18,
+        fontWeight: '600',
+        color: '#333',
+    },
+    gameGenre: {
+        fontSize: 14,
+        color: '#666',
+        marginVertical: 5,
+    },
+    startButton: {
+        marginTop: 10,
+        backgroundColor: '#6200ea',
+        paddingVertical: 8,
+        paddingHorizontal: 15,
+        borderRadius: 8,
+        alignSelf: 'flex-start',
+    },
+    startButtonText: {
+        color: '#fff',
+        fontSize: 14,
+        fontWeight: '500',
+    },
+    searchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#f0f0f0',
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        marginVertical: 15,
+    },
+    searchInput: {
+        flex: 1,
+        fontSize: 16,
+        paddingLeft: 10,
+        color: '#333',
+    },
+    tabContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginBottom: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#e0e0e0',
+    },
+    tab: {
+        paddingVertical: 10,
+        paddingHorizontal: 5,
+    },
+    activeTab: {
+        borderBottomWidth: 3,
+        borderBottomColor: '#6200ea',
+    },
+    tabText: {
+        fontSize: 16,
+        color: '#888',
+    },
+    activeTabText: {
+        color: '#6200ea',
+        fontWeight: '600',
+    },
+    gamesContainer: {
+        paddingBottom: 20,
+    },
 });
-
-
-
-
