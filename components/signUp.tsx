@@ -429,7 +429,6 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
 const authInstance  = getAuth(); // Initialize Firebase Auth
 
 export default function SignUp({ navigation, route }: SignUpProps) {

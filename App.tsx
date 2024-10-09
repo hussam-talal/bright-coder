@@ -96,8 +96,6 @@ import StudentLiveStreamsScreen from "./screens/student/StudentLiveStreamsScreen
 
 import ProfileParent from "./screens/parent/ProfileParent";      
 import ProfileTeacher from "./screens/teacher/ProfileTeacher";
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
 import ChildProgressScreen from "./screens/parent/ChildProgressScreen";
 import CreateInteractiveGameScreen from "./screens/student/games/CreateInteractiveGameScreen ";
 import { useTranslation } from 'react-i18next'; 
@@ -336,23 +334,22 @@ export default function App() {
 
 
   useEffect(() => {
-    const getSession = async () => {
-      const { data } = await supabase.auth.getSession();
-      setSession(data.session);
-    };
+    // const getSession = async () => {
+    //   const { data } = await supabase.auth.getSession();
+    //   setSession(data.session);
+    // };
 
-    getSession();
+    // getSession();
 
-    const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-    });
+    // const { data: authListener } = supabase.auth.onAuthStateChange((_event, session) => {
+    //   setSession(session);
+    // });
 
     const subscription = Notifications.addNotificationReceivedListener(notification => {
       console.log('Notification received!', notification);
     });
 
     return () => {
-      authListener.subscription.unsubscribe();
       subscription.remove();
     };
   }, []);
@@ -362,12 +359,7 @@ export default function App() {
         <AppProvider>
         <NavigationContainer>
 
-      {/* {session ? (
-        
-      ):( */}
-
         <Stack.Navigator initialRouteName="StarterPage" >
-        {/* <DrawerNavigator /> */}
         
           <Stack.Screen 
             name="StarterPage" 
@@ -430,10 +422,6 @@ export default function App() {
             />
           </Stack.Navigator>
           
-        {/* // ) : (
-        //     <DrawerNavigator />
-
-        //    )} */}
      
       </NavigationContainer>
       </AppProvider>
